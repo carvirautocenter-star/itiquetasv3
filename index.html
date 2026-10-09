@@ -11,56 +11,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
 *,*::before,*::after{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
-body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-text-size-adjust:100%;-webkit-text-tap-highlight-color:transparent}
-
-/* ============ ETIQUETA ============ */
-.itq-label{
-  --u:1;
-  position:relative;
-  overflow:hidden;
-  background:#f97316;
-  box-shadow:0 8px 25px -5px rgba(0,0,0,.5);
-  transition:background-color .15s, border-radius .15s;
-  margin:0 auto;
-}
-.itq-el{
-  position:absolute;
-  transform:translate(-50%,-50%);
-  text-align:center;
-  line-height:1;
-  user-select:none;-webkit-user-select:none;touch-action:none;z-index:5;
-}
+body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+.itq-label{--u:1;position:relative;overflow:hidden;background:#f97316;box-shadow:0 8px 25px -5px rgba(0,0,0,.5);transition:background-color .15s,border-radius .15s;margin:0 auto}
+.itq-el{position:absolute;transform:translate(-50%,-50%);text-align:center;line-height:1;user-select:none;-webkit-user-select:none;touch-action:none;z-index:5}
 .itq-el.draggable{cursor:grab}
 .itq-el.draggable:active{cursor:grabbing}
 .itq-el.draggable::before{content:'';position:absolute;inset:-6px;border:1.5px dashed rgba(99,102,241,0);border-radius:6px;pointer-events:none;transition:border-color .15s}
 .itq-el.draggable:hover::before{border-color:rgba(99,102,241,.55)}
 .itq-el.dragging::before{border-color:rgba(99,102,241,1);border-style:solid}
 .itq-el.hidden-el{display:none !important}
-
 .itq-title{display:flex;align-items:center;justify-content:center;font-weight:800;white-space:nowrap;letter-spacing:-.02em}
 .label-title-e,.label-title-text{font-weight:inherit;line-height:1}
-
-.qr-box-container{
-  position:relative;display:inline-flex;align-items:center;justify-content:center;
-  background:#fff;border:2px solid #e2e8f0;box-shadow:0 2px 6px rgba(0,0,0,.1);
-}
+.qr-box-container{position:relative;display:inline-flex;align-items:center;justify-content:center;background:#fff;border:2px solid #e2e8f0;box-shadow:0 2px 6px rgba(0,0,0,.1)}
 .qr-canvas{display:flex;align-items:center;justify-content:center;line-height:0;width:100%;height:100%}
 .qr-canvas img,.qr-canvas canvas{display:block;width:100%;height:100%}
-
-/* Ícone: SEMPRE classe (não id) para sobreviver ao clone */
-.qr-center-icon{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  object-fit:contain;
-  background:transparent !important;
-  padding:0 !important;border-radius:0 !important;box-shadow:none !important;
-  z-index:2;
-}
-.qr-center-icon.has-white-bg{
-  background:#fff !important;padding:3px !important;border-radius:6px !important;
-  box-shadow:0 1px 3px rgba(0,0,0,.15) !important;
-}
+.qr-center-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);object-fit:contain;background:transparent !important;padding:0 !important;border-radius:0 !important;box-shadow:none !important;z-index:2}
+.qr-center-icon.has-white-bg{background:#fff !important;padding:3px !important;border-radius:6px !important;box-shadow:0 1px 3px rgba(0,0,0,.15) !important}
 .qr-center-icon.hidden{display:none}
-
 .brand-el{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(2px*var(--u))}
 .brand-text-group{display:flex;flex-direction:column;align-items:center;gap:calc(2px*var(--u))}
 .brand-text-group.hidden{display:none}
@@ -74,33 +41,21 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
 .label-company-name{color:#000;font-weight:800}
 .label-subtitle{color:#000;font-weight:600;white-space:nowrap}
 .label-subcompany.hidden,.label-company-name.hidden,.label-subtitle.hidden{display:none}
-
 .itq-label.mirrored{transform:scaleX(-1)}
 .itq-el.draggable.locked{cursor:default}
 .itq-el.draggable.locked::before{display:none}
-
-/* ============ GUIAS ============ */
 .guide-layer{position:absolute;inset:0;pointer-events:none;z-index:100;overflow:hidden}
 .guide{position:absolute;pointer-events:none;display:none}
 .guide-v{top:0;bottom:0;width:1px;background:#ec4899;box-shadow:0 0 6px rgba(236,72,153,.7)}
 .guide-h{left:0;right:0;height:1px;background:#ec4899;box-shadow:0 0 6px rgba(236,72,153,.7)}
 .guide-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:#ec4899;transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(236,72,153,.9);display:none;z-index:101}
-
-/* ============ FOLHA A4 ============ */
-.a4-page{
-  width:210mm;height:297mm;min-height:297mm;background:#fff;
-  box-shadow:0 10px 25px -5px rgba(0,0,0,.5);position:relative;overflow:hidden;color:#000;
-  display:flex;flex-wrap:wrap;align-content:space-between;justify-content:space-between;
-  padding:6mm;
-}
+.a4-page{width:210mm;height:297mm;background:#fff;box-shadow:0 10px 25px -5px rgba(0,0,0,.5);position:relative;overflow:hidden;color:#000;display:flex;flex-wrap:wrap;align-content:space-between;justify-content:space-between;padding:6mm}
 .a4-item{display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
 .a4-item .itq-el{cursor:default;pointer-events:none}
 .a4-item .itq-el::before{display:none}
 .a4-item .guide-layer{display:none !important}
 #a4Viewport{overflow:hidden}
 #a4Scaler{transform-origin:top center;will-change:transform}
-
-/* ============ SIDEBAR ============ */
 .ft-section{background:rgba(15,23,42,.6);border:1px solid rgba(51,65,85,.6);border-radius:12px;overflow:hidden}
 .ft-section > summary{list-style:none;cursor:pointer;padding:12px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fb923c;display:flex;align-items:center;gap:8px;user-select:none}
 .ft-section > summary::-webkit-details-marker{display:none}
@@ -120,7 +75,6 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
 .ft-toggle input[type=checkbox]:checked::after{transform:translateX(14px)}
 .ft-note{font-size:10px;color:#94a3b8;padding:8px 10px;background:rgba(30,41,59,.6);border-radius:8px;border:1px dashed rgba(71,85,105,.6);line-height:1.4}
 .ft-note strong{color:#f97316}
-
 .gallery-empty{font-size:11px;color:#64748b;text-align:center;padding:14px 8px;background:rgba(30,41,59,.4);border-radius:8px;border:1px dashed rgba(71,85,105,.5)}
 .icons-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .icon-card{position:relative;aspect-ratio:1;border-radius:8px;padding:4px;cursor:pointer;border:2px solid transparent;transition:border-color .15s,transform .1s;overflow:hidden;background-image:linear-gradient(45deg,#cbd5e1 25%,transparent 25%),linear-gradient(-45deg,#cbd5e1 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#cbd5e1 75%),linear-gradient(-45deg,transparent 75%,#cbd5e1 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0px;background-color:#e2e8f0}
@@ -137,7 +91,7 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
 .tpl-thumb-transparent{background-image:linear-gradient(45deg,#cbd5e1 25%,transparent 25%),linear-gradient(-45deg,#cbd5e1 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#cbd5e1 75%),linear-gradient(-45deg,transparent 75%,#cbd5e1 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0px;background-color:#e2e8f0}
 .tpl-thumb-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8%}
 .tpl-thumb-title{font-weight:800;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.tpl-thumb-qr{width:38%;aspect-ratio:1;background:#fff;border-radius:12%;box-shadow:0 1px 3px rgba(0,0,0,.15);position:relative;display:flex;align-items:center;justify-content:center}
+.tpl-thumb-qr{width:38%;aspect-ratio:1;background:#fff;border-radius:12%;box-shadow:0 1px 3px rgba(0,0,0,.15);position:relative}
 .tpl-thumb-qr::after{content:'';position:absolute;inset:15%;background:repeating-conic-gradient(#000 0 25%,#fff 0 50%) 50%/8px 8px;border-radius:4%}
 .tpl-thumb-brand{font-weight:800;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .tpl-name{font-size:10px;color:#cbd5e1;padding:4px 6px;background:rgba(15,23,42,.8);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -151,15 +105,15 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
 .btn-ghost:hover{background:rgba(71,85,105,.8)}
 .btn-danger{background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.4)}
 .btn-indigo{background:rgba(99,102,241,.2);color:#a5b4fc;border:1px solid rgba(99,102,241,.4)}
-
 .mobile-bar{padding-bottom:calc(.75rem + env(safe-area-inset-bottom,0px))}
-@media (max-width:1023px){body{padding-bottom:calc(6.5rem + env(safe-area-inset-bottom,0px))}}
+@media (max-width:1023px){body{padding-bottom:calc(7rem + env(safe-area-inset-bottom,0px))}}
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-track{background:#1e293b}
 ::-webkit-scrollbar-thumb{background:#475569;border-radius:4px}
-#pngModal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+#pngModal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:20px;overflow:auto}
 #pngModal.active{display:flex}
-#pngModal img{max-width:min(90vw,600px);max-height:80vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8)}
+#pngModal img{max-width:min(90vw,600px);max-height:80vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8);background:#fff}
+#pngModal img.transparent-preview{background-image:linear-gradient(45deg,#888 25%,transparent 25%),linear-gradient(-45deg,#888 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#888 75%),linear-gradient(-45deg,transparent 75%,#888 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0px;background-color:#ccc}
 #toast{position:fixed;bottom:130px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#f8fafc;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 10px 25px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:200;border:1px solid rgba(71,85,105,.6);display:flex;align-items:center;gap:8px;max-width:90vw}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast.success{border-color:rgba(34,197,94,.5)}
@@ -170,21 +124,29 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
 @media print{
   html,body{background:#fff !important;color:#000 !important;padding:0 !important;margin:0 !important;width:auto !important;height:auto !important;overflow:visible !important}
   .no-print{display:none !important}
-  main{display:block !important;height:auto !important;overflow:visible !important;background:#fff !important}
+  main{display:block !important;height:auto !important;overflow:visible !important;background:transparent !important;padding:0 !important;margin:0 !important}
   #workspace{display:block !important;padding:0 !important;margin:0 !important;min-height:0 !important}
   #viewSingle{display:none !important}
-  #viewA4{display:block !important;padding:0 !important;margin:0 !important}
-  #a4Viewport{display:block !important;overflow:visible !important;height:auto !important;width:auto !important}
+  #viewA4{display:block !important;padding:0 !important;margin:0 !important;height:auto !important}
+  #a4Viewport{display:block !important;overflow:visible !important;height:auto !important;max-height:none !important;width:auto !important}
   #a4Scaler{transform:none !important;width:auto !important;height:auto !important}
-  .a4-page{box-shadow:none !important;margin:0 !important;width:210mm !important;height:297mm !important}
+  .a4-page{
+    box-shadow:none !important;margin:0 !important;
+    width:210mm !important;height:297mm !important;
+    max-height:297mm !important;min-height:0 !important;
+    page-break-after:avoid !important;break-after:avoid !important;
+    page-break-inside:avoid !important;break-inside:avoid !important;
+  }
   @page{size:A4 portrait;margin:0}
+  /* Se modo transparente, remove fundo branco do A4 também */
+  body.transparent-print .a4-page{background:transparent !important}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
 }
 </style>
 </head>
 <body class="min-h-screen flex flex-col lg:flex-row antialiased bg-slate-900 text-slate-100">
 
 <aside class="no-print order-last lg:order-first w-full lg:w-[420px] bg-slate-800 border-t lg:border-t-0 lg:border-r border-slate-700 flex flex-col h-auto lg:h-screen z-20 shrink-0">
-
   <div class="hidden lg:flex p-5 border-b border-slate-700 items-center justify-between bg-slate-800/80 backdrop-blur">
     <div class="flex items-center gap-3">
       <div class="p-2 bg-orange-500 rounded-lg text-white font-bold"><i class="fa-solid fa-car-battery text-xl"></i></div>
@@ -195,12 +157,11 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
     </div>
     <div class="flex items-center gap-2">
       <span id="saveStatus" class="text-[10px] font-medium text-slate-500"></span>
-      <span class="text-xs font-semibold px-2.5 py-1 bg-orange-500/20 text-orange-400 rounded-full border border-orange-500/30">v5.0</span>
+      <span class="text-xs font-semibold px-2.5 py-1 bg-orange-500/20 text-orange-400 rounded-full border border-orange-500/30">v5.1</span>
     </div>
   </div>
 
   <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
-
     <div class="flex gap-2">
       <button onclick="saveAsTemplate()" class="btn-sm btn-primary flex-1"><i class="fa-solid fa-floppy-disk"></i> Salvar como modelo</button>
       <button onclick="resetAllState()" class="btn-sm btn-danger" title="Resetar tudo"><i class="fa-solid fa-rotate-left"></i></button>
@@ -297,55 +258,29 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
       <summary><i class="fa-solid fa-ruler-combined"></i> Dimensões &amp; Grade A4 (mm)</summary>
       <div>
         <div class="grid grid-cols-2 gap-3 mb-3">
-          <div>
-            <label class="text-xs text-slate-300 block mb-1">Largura (mm)</label>
-            <input type="number" id="inputLabelWidth" value="65" min="15" max="200" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
-          </div>
-          <div>
-            <label class="text-xs text-slate-300 block mb-1">Altura (mm)</label>
-            <input type="number" id="inputLabelHeight" value="65" min="15" max="200" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
-          </div>
+          <div><label class="text-xs text-slate-300 block mb-1">Largura (mm)</label><input type="number" id="inputLabelWidth" value="65" min="15" max="200" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"></div>
+          <div><label class="text-xs text-slate-300 block mb-1">Altura (mm)</label><input type="number" id="inputLabelHeight" value="65" min="15" max="200" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"></div>
         </div>
-
-        <div class="ft-toggle" style="margin-bottom:10px">
-          <span><i class="fa-solid fa-rotate text-indigo-400 mr-1"></i> Rotacionar etiquetas 90°</span>
-          <input type="checkbox" id="toggleRotation">
-        </div>
-
+        <div class="ft-toggle" style="margin-bottom:10px"><span><i class="fa-solid fa-rotate text-indigo-400 mr-1"></i> Rotacionar etiquetas 90°</span><input type="checkbox" id="toggleRotation"></div>
         <div class="grid grid-cols-2 gap-3 mb-3">
-          <div>
-            <label class="text-xs text-slate-300 block mb-1">Colunas (0=auto)</label>
-            <input type="number" id="inputForcedCols" value="0" min="0" max="20" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
-          </div>
-          <div>
-            <label class="text-xs text-slate-300 block mb-1">Linhas (0=auto)</label>
-            <input type="number" id="inputForcedRows" value="0" min="0" max="30" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
-          </div>
+          <div><label class="text-xs text-slate-300 block mb-1">Colunas (0=auto)</label><input type="number" id="inputForcedCols" value="0" min="0" max="20" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"></div>
+          <div><label class="text-xs text-slate-300 block mb-1">Linhas (0=auto)</label><input type="number" id="inputForcedRows" value="0" min="0" max="30" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"></div>
         </div>
-
         <div class="grid grid-cols-2 gap-3 mb-3">
-          <div>
-            <label class="text-xs text-slate-300 block mb-1">Margem (mm)</label>
-            <input type="number" id="inputPageMargin" value="6" min="0" max="20" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
-          </div>
-          <div>
-            <label class="text-xs text-slate-300 block mb-1">Gap mín (mm)</label>
-            <input type="number" id="inputLabelGap" value="3" min="0" max="20" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
-          </div>
+          <div><label class="text-xs text-slate-300 block mb-1">Margem (mm)</label><input type="number" id="inputPageMargin" value="6" min="0" max="20" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"></div>
+          <div><label class="text-xs text-slate-300 block mb-1">Gap mín (mm)</label><input type="number" id="inputLabelGap" value="3" min="0" max="20" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"></div>
         </div>
-
         <div>
-          <label class="text-xs text-slate-300 block mb-1">Distribuição na folha</label>
+          <label class="text-xs text-slate-300 block mb-1">Distribuição</label>
           <select id="selectDistribution" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500">
-            <option value="stretch">Esticar até bordas (máx. aproveitamento)</option>
+            <option value="stretch">Esticar até bordas</option>
             <option value="center">Centralizar bloco</option>
           </select>
         </div>
-
         <div class="text-xs text-slate-400 bg-slate-800/80 p-2.5 rounded-lg border border-slate-700/50 space-y-1 mt-3">
-          <div class="flex justify-between"><span>Grade:</span><span id="lblCalculatedCount" class="font-bold text-orange-400 text-sm">12 un.</span></div>
-          <div class="flex justify-between text-[11px]"><span>Tam. etiqueta efetiva:</span><span id="lblEffectiveSize" class="text-slate-300 font-medium">65×65 mm</span></div>
-          <div class="flex justify-between text-[11px]"><span>Ocupação folha:</span><span id="lblFillPercent" class="text-slate-300 font-medium">—</span></div>
+          <div class="flex justify-between"><span>Grade:</span><span id="lblCalculatedCount" class="font-bold text-orange-400 text-sm">—</span></div>
+          <div class="flex justify-between text-[11px]"><span>Efetivo:</span><span id="lblEffectiveSize" class="text-slate-300 font-medium">—</span></div>
+          <div class="flex justify-between text-[11px]"><span>Ocupação:</span><span id="lblFillPercent" class="text-slate-300 font-medium">—</span></div>
         </div>
       </div>
     </details>
@@ -443,23 +378,26 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
         <button onclick="saveAsTemplate()" class="btn-sm btn-primary w-full"><i class="fa-solid fa-plus"></i> Salvar modelo atual</button>
       </div>
     </details>
-
   </div>
 
-  <div class="no-print mobile-bar fixed bottom-0 left-0 right-0 lg:static z-30 border-t border-slate-700 bg-slate-800/95 backdrop-blur-md p-3 lg:p-4 flex flex-row lg:flex-col gap-2">
-    <button onclick="window.print()" class="flex-1 bg-orange-500 hover:bg-orange-600 active:scale-[.98] text-white font-semibold py-3 px-3 rounded-xl shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all text-sm"><i class="fa-solid fa-print"></i> <span>Imprimir A4</span></button>
-    <button onclick="previewPNG()" class="flex-1 bg-indigo-500 hover:bg-indigo-600 active:scale-[.98] text-white font-semibold py-3 px-3 rounded-xl shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 text-sm transition-all"><i class="fa-solid fa-image"></i> <span>Ver PNG</span></button>
-    <button onclick="downloadSinglePNG()" class="flex-1 bg-slate-700 hover:bg-slate-600 active:scale-[.98] text-slate-200 font-medium py-3 px-3 rounded-xl flex items-center justify-center gap-2 text-sm transition-all"><i class="fa-solid fa-download"></i> <span class="hidden sm:inline">Baixar PNG HD</span><span class="sm:hidden">Baixar</span></button>
+  <div class="no-print mobile-bar fixed bottom-0 left-0 right-0 lg:static z-30 border-t border-slate-700 bg-slate-800/95 backdrop-blur-md p-3 lg:p-4 flex flex-col gap-2">
+    <div class="flex gap-2">
+      <button onclick="window.print()" class="flex-1 bg-orange-500 hover:bg-orange-600 active:scale-[.98] text-white font-semibold py-2.5 px-3 rounded-xl shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all text-sm"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+      <button onclick="downloadA4PNG()" class="flex-1 bg-emerald-500 hover:bg-emerald-600 active:scale-[.98] text-white font-semibold py-2.5 px-3 rounded-xl shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition-all text-sm"><i class="fa-solid fa-file-image"></i> <span>A4 PNG</span></button>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="previewPNG()" class="flex-1 bg-indigo-500 hover:bg-indigo-600 active:scale-[.98] text-white font-semibold py-2.5 px-3 rounded-xl shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 text-sm transition-all"><i class="fa-solid fa-image"></i> <span>Ver</span></button>
+      <button onclick="downloadSinglePNG()" class="flex-1 bg-slate-700 hover:bg-slate-600 active:scale-[.98] text-slate-200 font-medium py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 text-sm transition-all"><i class="fa-solid fa-download"></i> <span>Etiqueta</span></button>
+    </div>
   </div>
 </aside>
 
 <main class="order-first lg:order-last flex-1 flex flex-col h-auto lg:h-screen lg:overflow-y-auto bg-slate-950">
-
   <div class="no-print lg:hidden flex items-center gap-3 px-4 py-3 bg-slate-900 border-b border-slate-800">
     <div class="p-2 bg-orange-500 rounded-lg text-white font-bold"><i class="fa-solid fa-car-battery"></i></div>
     <div class="min-w-0 flex-1">
       <h1 class="font-bold text-base text-white leading-tight truncate">I-Tiqueta AutoBox</h1>
-      <p class="text-[11px] text-slate-400">Editor Completo v5</p>
+      <p class="text-[11px] text-slate-400">Editor Completo v5.1</p>
     </div>
     <span id="saveStatusMobile" class="text-[10px] font-medium text-slate-500"></span>
   </div>
@@ -472,36 +410,26 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
       </div>
       <span id="mirrorBadge" class="hidden text-xs font-medium px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 whitespace-nowrap"><i class="fa-solid fa-right-left mr-1"></i> ESPELHADO</span>
     </div>
-    <div class="hidden md:flex text-xs text-slate-400 items-center gap-2">
-      <i class="fa-solid fa-magnet text-pink-400"></i>
-      <span>Guias em cruz aparecem ao arrastar.</span>
-    </div>
   </header>
 
   <div id="workspace" class="flex-1 p-3 sm:p-6 flex items-start lg:items-center justify-center min-h-[380px] lg:min-h-[600px]">
-
     <div id="viewSingle" class="flex flex-col items-center justify-center gap-4 sm:gap-6 w-full max-w-md">
       <div class="text-center space-y-1">
         <h3 class="text-sm font-semibold text-slate-300">Pré-visualização Interativa</h3>
-        <p class="text-xs text-slate-500">Arraste os elementos • <span id="lblPreviewSize">65×65 mm</span></p>
+        <p class="text-xs text-slate-500">Arraste • <span id="lblPreviewSize">65×65 mm</span></p>
       </div>
-
       <div id="singleLabelWrapper" class="p-4 sm:p-8 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl flex items-center justify-center w-full">
-
         <div id="liveLabel" class="itq-label">
           <div class="guide-layer" id="guideLayer"></div>
-
           <div class="itq-el itq-title draggable el-title" id="elTitle" data-el-key="title">
             <span class="label-title-e" id="labelTitleE" style="color:#2563eb">I-</span><span class="label-title-text" id="labelTitleText" style="color:#000">Tiqueta</span>
           </div>
-
           <div class="itq-el draggable el-qr" id="elQR" data-el-key="qr">
             <div class="qr-box-container qr-box" id="qrBox">
               <div class="qr-canvas" id="qrcodeCanvas"></div>
               <img class="qr-center-icon" id="qrCenterIcon" alt="">
             </div>
           </div>
-
           <div class="itq-el draggable brand-el" id="elBrand" data-el-key="brand">
             <img class="company-custom-logo" id="companyCustomLogo" alt="">
             <div class="brand-text-group" id="companyTextGroup">
@@ -513,7 +441,6 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
               </div>
             </div>
           </div>
-
           <div class="itq-el draggable el-subtitle" id="elSubtitle" data-el-key="subtitle">
             <span class="label-subtitle" id="labelSubtitle">Verifique sua troca de óleo</span>
           </div>
@@ -524,21 +451,20 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
     <div id="viewA4" class="hidden w-full flex flex-col items-center py-2 lg:py-6">
       <div class="no-print text-center mb-3 space-y-1">
         <h3 class="text-sm font-semibold text-slate-300">Folha A4 Otimizada</h3>
-        <p class="text-xs text-slate-500">Zoom <span id="a4ZoomInfo">100%</span> • <span id="a4LayoutInfo">2×2</span></p>
+        <p class="text-xs text-slate-500">Zoom <span id="a4ZoomInfo">100%</span> • <span id="a4LayoutInfo">—</span></p>
       </div>
       <div id="a4Viewport" class="w-full flex justify-center overflow-hidden">
         <div id="a4Scaler"><div id="a4Page" class="a4-page"></div></div>
       </div>
     </div>
-
   </div>
 </main>
 
 <div id="pngModal" onclick="closePngModal(event)">
   <div class="flex flex-col items-center gap-4">
     <img id="pngPreviewImg" alt="Pré-visualização PNG">
-    <div class="flex gap-2">
-      <button onclick="downloadSinglePNG()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-5 rounded-lg text-sm flex items-center gap-2 transition-all"><i class="fa-solid fa-download"></i> Baixar PNG</button>
+    <div class="flex gap-2 flex-wrap justify-center">
+      <button id="btnDownloadFromModal" onclick="downloadSinglePNG()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-5 rounded-lg text-sm flex items-center gap-2 transition-all"><i class="fa-solid fa-download"></i> Baixar</button>
       <button onclick="closePngModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2.5 px-5 rounded-lg text-sm transition-all">Fechar</button>
     </div>
   </div>
@@ -550,135 +476,81 @@ body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-tex
 const STORAGE_KEY = 'itiqueta_state_v5';
 const ICONS_KEY = 'itiqueta_icons_v5';
 const TEMPLATES_KEY = 'itiqueta_templates_v5';
-
 const DEFAULT_STATE = {
-  title: "I-Tiqueta",
-  subtitle: "Verifique sua troca de óleo",
-  subCompany: "Centro Automotivo",
-  companyName: "autobox",
-  bgColor: "#f97316",
-  textColor: "#000000",
-  titleEColor: "#2563eb",
-  shape: "rounded",
-  backgroundType: "color",
-  qrData: "https://autobox.com.br/troca-de-oleo",
-  qrIconSrc: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23f97316' d='M32 64C32 28.7 60.7 0 96 0L256 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64L32 64zM208 96c0-8.8-7.2-16-16-16l-64 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l64 0c8.8 0 16-7.2 16-16z'/></svg>",
-  companyLogoSrc: null,
-  isMirrored: false,
-  dragEnabled: true,
-  guidesEnabled: true,
-  iconBgEnabled: false,
-  /* Dimensões em mm */
-  labelWidthMm: 65,
-  labelHeightMm: 65,
-  labelRotation: 0,     /* 0 ou 90 */
-  forcedCols: 0,        /* 0 = auto */
-  forcedRows: 0,        /* 0 = auto */
-  labelGapMm: 3,
-  pageMarginMm: 6,
-  distribution: 'stretch',
-  el: {
-    title:       { x: 50, y: 13, size: 24, weight: 800, visible: true },
-    qr:          { x: 50, y: 50, size: 110, visible: true },
-    brand:       { x: 50, y: 81, visible: true, showLogo: true, showText: true, badgeMode: 'letter' },
-    subCompany:  { size: 10, weight: 600, visible: true },
-    brandBadge:  { size: 20, visible: true },
-    companyName: { size: 18, weight: 800, visible: true },
-    companyLogo: { size: 40 },
-    subtitle:    { x: 50, y: 93, size: 12, weight: 600, visible: true },
-    qrIcon:      { size: 32, visible: true }
+  title:"I-Tiqueta",subtitle:"Verifique sua troca de óleo",subCompany:"Centro Automotivo",companyName:"autobox",
+  bgColor:"#f97316",textColor:"#000000",titleEColor:"#2563eb",shape:"rounded",backgroundType:"color",
+  qrData:"https://autobox.com.br/troca-de-oleo",
+  qrIconSrc:"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23f97316' d='M32 64C32 28.7 60.7 0 96 0L256 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64L32 64zM208 96c0-8.8-7.2-16-16-16l-64 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l64 0c8.8 0 16-7.2 16-16z'/></svg>",
+  companyLogoSrc:null,isMirrored:false,dragEnabled:true,guidesEnabled:true,iconBgEnabled:false,
+  labelWidthMm:65,labelHeightMm:65,labelRotation:0,forcedCols:0,forcedRows:0,labelGapMm:3,pageMarginMm:6,distribution:'stretch',
+  el:{
+    title:{x:50,y:13,size:24,weight:800,visible:true},
+    qr:{x:50,y:50,size:110,visible:true},
+    brand:{x:50,y:81,visible:true,showLogo:true,showText:true,badgeMode:'letter'},
+    subCompany:{size:10,weight:600,visible:true},
+    brandBadge:{size:20,visible:true},
+    companyName:{size:18,weight:800,visible:true},
+    companyLogo:{size:40},
+    subtitle:{x:50,y:93,size:12,weight:600,visible:true},
+    qrIcon:{size:32,visible:true}
   },
-  labelBorder: { width: 0, color: '#000000', style: 'solid', radius: 28 },
-  qrBorder:    { width: 2, color: '#e2e8f0', style: 'solid', radius: 16, padding: 10, bg: '#ffffff' }
+  labelBorder:{width:0,color:'#000000',style:'solid',radius:28},
+  qrBorder:{width:2,color:'#e2e8f0',style:'solid',radius:16,padding:10,bg:'#ffffff'}
 };
-
 let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-let savedIcons = [];
-let savedTemplates = [];
-
+let savedIcons = [], savedTemplates = [];
 const MM_TO_PX = 96 / 25.4;
 const BASE_LABEL_PX = 300;
 
 let saveTimer;
 function scheduleSave(){ clearTimeout(saveTimer); saveTimer = setTimeout(persistState, 400); }
-function persistState(){
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); flashSaveStatus('Salvo'); }
-  catch(e) { flashSaveStatus('Falha', true); }
-}
+function persistState(){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); flashSaveStatus('Salvo'); } catch(e){ flashSaveStatus('Falha', true); } }
 function flashSaveStatus(text, isError){
   ['saveStatus','saveStatusMobile'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = text;
-    el.style.color = isError ? '#f87171' : '#4ade80';
-    clearTimeout(el._t);
-    el._t = setTimeout(() => { el.textContent = ''; }, 1200);
+    const el = document.getElementById(id); if (!el) return;
+    el.textContent = text; el.style.color = isError ? '#f87171' : '#4ade80';
+    clearTimeout(el._t); el._t = setTimeout(() => { el.textContent = ''; }, 1200);
   });
 }
 function loadPersistedState(){
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
+    const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return;
     const saved = JSON.parse(raw);
     Object.keys(saved).forEach(k => {
-      if (k === 'el' && saved.el) {
-        Object.keys(saved.el).forEach(elKey => {
-          state.el[elKey] = { ...(state.el[elKey] || {}), ...saved.el[elKey] };
-        });
-      } else if (k === 'labelBorder' && saved.labelBorder) {
-        state.labelBorder = { ...state.labelBorder, ...saved.labelBorder };
-      } else if (k === 'qrBorder' && saved.qrBorder) {
-        state.qrBorder = { ...state.qrBorder, ...saved.qrBorder };
-      } else {
-        state[k] = saved[k];
-      }
+      if (k === 'el' && saved.el) Object.keys(saved.el).forEach(elKey => { state.el[elKey] = {...(state.el[elKey]||{}), ...saved.el[elKey]}; });
+      else if (k === 'labelBorder' && saved.labelBorder) state.labelBorder = {...state.labelBorder, ...saved.labelBorder};
+      else if (k === 'qrBorder' && saved.qrBorder) state.qrBorder = {...state.qrBorder, ...saved.qrBorder};
+      else state[k] = saved[k];
     });
-  } catch(e) { console.warn(e); }
+  } catch(e) {}
 }
-
-function loadSavedIcons(){
-  try { savedIcons = JSON.parse(localStorage.getItem(ICONS_KEY) || '[]'); } catch(e){ savedIcons = []; }
-}
+function loadSavedIcons(){ try { savedIcons = JSON.parse(localStorage.getItem(ICONS_KEY) || '[]'); } catch(e){ savedIcons = []; } }
 function persistIcons(){ try { localStorage.setItem(ICONS_KEY, JSON.stringify(savedIcons)); } catch(e){ toast('Limite de armazenamento', 'error'); } }
 function renderIconsGallery(){
-  const el = document.getElementById('iconsGallery');
-  if (!el) return;
+  const el = document.getElementById('iconsGallery'); if (!el) return;
   if (savedIcons.length === 0) { el.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1">Nenhum ícone salvo.</div>'; return; }
-  el.innerHTML = savedIcons.map(icon => `
-    <div class="icon-card" data-id="${icon.id}" title="${icon.name || 'Ícone'}">
-      <img src="${icon.src}" alt="">
-      <button class="icon-del" onclick="event.stopPropagation();deleteIcon('${icon.id}')">×</button>
-    </div>`).join('');
-  el.querySelectorAll('.icon-card').forEach(card => {
-    card.addEventListener('click', () => applyIconFromGallery(card.dataset.id));
-  });
+  el.innerHTML = savedIcons.map(icon => `<div class="icon-card" data-id="${icon.id}" title="${icon.name||'Ícone'}"><img src="${icon.src}" alt=""><button class="icon-del" onclick="event.stopPropagation();deleteIcon('${icon.id}')">×</button></div>`).join('');
+  el.querySelectorAll('.icon-card').forEach(card => card.addEventListener('click', () => applyIconFromGallery(card.dataset.id)));
 }
 function saveCurrentQrIcon(){
   if (!state.qrIconSrc) { toast('Nenhum ícone carregado', 'error'); return; }
   if (savedIcons.some(i => i.src === state.qrIconSrc)) { toast('Já está na galeria'); return; }
-  savedIcons.unshift({ id: 'i_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), name: 'Ícone', src: state.qrIconSrc, createdAt: Date.now() });
+  savedIcons.unshift({id:'i_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:'Ícone',src:state.qrIconSrc,createdAt:Date.now()});
   persistIcons(); renderIconsGallery(); toast('Ícone salvo', 'success');
 }
 function saveCompanyLogoToGallery(){
   if (!state.companyLogoSrc) { toast('Nenhuma logo enviada', 'error'); return; }
   if (savedIcons.some(i => i.src === state.companyLogoSrc)) { toast('Já está na galeria'); return; }
-  savedIcons.unshift({ id: 'i_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), name: 'Logo', src: state.companyLogoSrc, createdAt: Date.now() });
+  savedIcons.unshift({id:'i_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:'Logo',src:state.companyLogoSrc,createdAt:Date.now()});
   persistIcons(); renderIconsGallery(); toast('Logo salva', 'success');
 }
-function applyIconFromGallery(id){
-  const icon = savedIcons.find(i => i.id === id);
-  if (!icon) return;
-  state.qrIconSrc = icon.src; applyAll(); toast('Ícone aplicado', 'success');
-}
+function applyIconFromGallery(id){ const icon = savedIcons.find(i => i.id === id); if (!icon) return; state.qrIconSrc = icon.src; applyAll(); toast('Ícone aplicado', 'success'); }
 function deleteIcon(id){ savedIcons = savedIcons.filter(i => i.id !== id); persistIcons(); renderIconsGallery(); toast('Removido'); }
 
-function loadSavedTemplates(){
-  try { savedTemplates = JSON.parse(localStorage.getItem(TEMPLATES_KEY) || '[]'); } catch(e){ savedTemplates = []; }
-}
+function loadSavedTemplates(){ try { savedTemplates = JSON.parse(localStorage.getItem(TEMPLATES_KEY) || '[]'); } catch(e){ savedTemplates = []; } }
 function persistTemplates(){ try { localStorage.setItem(TEMPLATES_KEY, JSON.stringify(savedTemplates)); } catch(e){ toast('Limite de armazenamento', 'error'); } }
 function renderTemplatesGallery(){
-  const el = document.getElementById('templatesGallery');
-  if (!el) return;
+  const el = document.getElementById('templatesGallery'); if (!el) return;
   if (savedTemplates.length === 0) { el.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1">Nenhum modelo salvo.</div>'; return; }
   el.innerHTML = savedTemplates.map(tpl => {
     const s = tpl.state;
@@ -687,17 +559,7 @@ function renderTemplatesGallery(){
     const bg = isTransparent ? '' : s.bgColor;
     const titleE = (s.title||'').match(/^i-/i) ? (s.title||'').substring(0,2) : '';
     const titleT = titleE ? (s.title||'').substring(2) : (s.title||'');
-    return `<div class="tpl-card" data-id="${tpl.id}">
-      <div class="tpl-thumb ${isTransparent?'tpl-thumb-transparent':''}" style="${isTransparent?'':'background:'+bg+';'}">
-        <div class="tpl-thumb-inner" style="border-radius:${radius};">
-          <div class="tpl-thumb-title"><span style="color:${s.titleEColor||'#2563eb'}">${titleE}</span><span style="color:${s.textColor||'#000'}">${titleT}</span></div>
-          <div class="tpl-thumb-qr"></div>
-          <div class="tpl-thumb-brand" style="color:${s.textColor||'#000'}">${s.companyName||''}</div>
-        </div>
-      </div>
-      <div class="tpl-name">${escapeHtml(tpl.name)}</div>
-      <button class="tpl-del" onclick="event.stopPropagation();deleteTemplate('${tpl.id}')">×</button>
-    </div>`;
+    return `<div class="tpl-card" data-id="${tpl.id}"><div class="tpl-thumb ${isTransparent?'tpl-thumb-transparent':''}" style="${isTransparent?'':'background:'+bg+';'}"><div class="tpl-thumb-inner" style="border-radius:${radius};"><div class="tpl-thumb-title"><span style="color:${s.titleEColor||'#2563eb'}">${titleE}</span><span style="color:${s.textColor||'#000'}">${titleT}</span></div><div class="tpl-thumb-qr"></div><div class="tpl-thumb-brand" style="color:${s.textColor||'#000'}">${s.companyName||''}</div></div></div><div class="tpl-name">${escapeHtml(tpl.name)}</div><button class="tpl-del" onclick="event.stopPropagation();deleteTemplate('${tpl.id}')">×</button></div>`;
   }).join('');
   el.querySelectorAll('.tpl-card').forEach(card => card.addEventListener('click', () => loadTemplate(card.dataset.id)));
 }
@@ -705,7 +567,7 @@ function escapeHtml(str){ return String(str).replace(/[&<>"']/g, c => ({'&':'&am
 function saveAsTemplate(){
   const name = prompt('Nome do modelo:', 'Modelo ' + (savedTemplates.length + 1));
   if (!name || !name.trim()) return;
-  savedTemplates.unshift({ id: 't_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), name: name.trim(), state: JSON.parse(JSON.stringify(state)), createdAt: Date.now() });
+  savedTemplates.unshift({id:'t_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:name.trim(),state:JSON.parse(JSON.stringify(state)),createdAt:Date.now()});
   persistTemplates(); renderTemplatesGallery(); toast('Modelo salvo', 'success');
 }
 function loadTemplate(id){
@@ -724,56 +586,38 @@ function deleteTemplate(id){
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  loadPersistedState();
-  loadSavedIcons();
-  loadSavedTemplates();
-  bindBasicControls();
-  bindFineTuning();
-  initGuidePool();
-  generateQRCode();
-  syncAllUI();
-  applyAll();
-  makeAllDraggable();
-  renderIconsGallery();
-  renderTemplatesGallery();
+  loadPersistedState(); loadSavedIcons(); loadSavedTemplates();
+  bindBasicControls(); bindFineTuning(); initGuidePool();
+  generateQRCode(); syncAllUI(); applyAll(); makeAllDraggable();
+  renderIconsGallery(); renderTemplatesGallery();
 });
 
 function syncAllUI(){
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
-  set('inputTitle', state.title);
-  set('inputSubtitle', state.subtitle);
-  set('inputSubCompany', state.subCompany);
-  set('inputCompanyName', state.companyName);
-  set('selectShape', state.shape);
-  set('selectBackgroundType', state.backgroundType);
-  set('colorBg', state.bgColor);
-  set('colorText', state.textColor);
-  set('colorE', state.titleEColor);
+  set('inputTitle', state.title); set('inputSubtitle', state.subtitle);
+  set('inputSubCompany', state.subCompany); set('inputCompanyName', state.companyName);
+  set('selectShape', state.shape); set('selectBackgroundType', state.backgroundType);
+  set('colorBg', state.bgColor); set('colorText', state.textColor); set('colorE', state.titleEColor);
   set('inputQrData', state.qrData);
-  set('inputLabelWidth', state.labelWidthMm);
-  set('inputLabelHeight', state.labelHeightMm);
-  set('inputForcedCols', state.forcedCols);
-  set('inputForcedRows', state.forcedRows);
-  set('inputLabelGap', state.labelGapMm);
-  set('inputPageMargin', state.pageMarginMm);
-  set('selectDistribution', state.distribution);
-  set('selectBadgeMode', state.el.brand.badgeMode || 'letter');
+  set('inputLabelWidth', state.labelWidthMm); set('inputLabelHeight', state.labelHeightMm);
+  set('inputForcedCols', state.forcedCols); set('inputForcedRows', state.forcedRows);
+  set('inputLabelGap', state.labelGapMm); set('inputPageMargin', state.pageMarginMm);
+  set('selectDistribution', state.distribution); set('selectBadgeMode', state.el.brand.badgeMode || 'letter');
   const tdr = document.getElementById('toggleDrag'); if (tdr) tdr.checked = state.dragEnabled;
   const tgu = document.getElementById('toggleGuides'); if (tgu) tgu.checked = state.guidesEnabled;
   const tbi = document.getElementById('toggleIconBg'); if (tbi) tbi.checked = state.iconBgEnabled === true;
   const tro = document.getElementById('toggleRotation'); if (tro) tro.checked = state.labelRotation === 90;
+  document.body.classList.toggle('transparent-print', state.backgroundType === 'transparent');
   const label = document.getElementById('liveLabel');
   if (label) label.classList.toggle('mirrored', state.isMirrored);
   if (state.isMirrored) {
-    const btnN = document.getElementById('btnNormalMode'), btnM = document.getElementById('btnMirrorMode');
-    const badge = document.getElementById('mirrorBadge');
+    const btnN = document.getElementById('btnNormalMode'), btnM = document.getElementById('btnMirrorMode'), badge = document.getElementById('mirrorBadge');
     if (btnN) btnN.className = "p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all";
     if (btnM) btnM.className = "p-2.5 rounded-lg border text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20";
     if (badge) badge.classList.remove('hidden');
   }
   syncFineTuningUI();
 }
-
 window.addEventListener('resize', () => { clearTimeout(window._rt); window._rt = setTimeout(() => { updatePreviewLabelSize(); fitA4Sheet(); }, 120); });
 
 function bindBasicControls(){
@@ -783,45 +627,37 @@ function bindBasicControls(){
   bind('inputSubCompany','input',e=>{state.subCompany=e.target.value;applyAll()});
   bind('inputCompanyName','input',e=>{state.companyName=e.target.value;applyAll()});
   bind('selectShape','change',e=>{state.shape=e.target.value;applyAll()});
-  bind('selectBackgroundType','change',e=>{state.backgroundType=e.target.value;regenerateQR();applyAll()});
+  bind('selectBackgroundType','change',e=>{
+    state.backgroundType=e.target.value;
+    document.body.classList.toggle('transparent-print', state.backgroundType === 'transparent');
+    regenerateQR(); applyAll();
+  });
   bind('colorBg','input',e=>{state.bgColor=e.target.value;applyAll()});
   bind('colorText','input',e=>{state.textColor=e.target.value;applyAll()});
   bind('colorE','input',e=>{state.titleEColor=e.target.value;applyAll()});
   bind('inputQrData','input',e=>{state.qrData=e.target.value||"https://autobox.com.br";regenerateQR()});
-
   bind('inputLabelWidth','input',e=>{state.labelWidthMm=Math.min(200,Math.max(15,parseFloat(e.target.value)||65));updatePreviewLabelSize();renderA4Sheet();scheduleSave()});
   bind('inputLabelHeight','input',e=>{state.labelHeightMm=Math.min(200,Math.max(15,parseFloat(e.target.value)||65));updatePreviewLabelSize();renderA4Sheet();scheduleSave()});
   bind('inputForcedCols','input',e=>{state.forcedCols=Math.min(20,Math.max(0,parseInt(e.target.value)||0));renderA4Sheet();scheduleSave()});
   bind('inputForcedRows','input',e=>{state.forcedRows=Math.min(30,Math.max(0,parseInt(e.target.value)||0));renderA4Sheet();scheduleSave()});
   bind('inputLabelGap','input',e=>{state.labelGapMm=Math.min(20,Math.max(0,parseInt(e.target.value)||0));renderA4Sheet();scheduleSave()});
   bind('inputPageMargin','input',e=>{state.pageMarginMm=Math.min(20,Math.max(0,parseInt(e.target.value)||0));renderA4Sheet();scheduleSave()});
-
   bind('toggleRotation','change',e=>{state.labelRotation = e.target.checked ? 90 : 0; updatePreviewLabelSize(); renderA4Sheet(); scheduleSave();});
-
   bind('selectDistribution','change',e=>{state.distribution=e.target.value;renderA4Sheet();scheduleSave()});
   bind('selectBadgeMode','change',e=>{state.el.brand.badgeMode=e.target.value;applyElements();renderA4Sheet();scheduleSave()});
   bind('uploadQrIcon','change',handleQrIconUpload);
   bind('uploadCompanyLogo','change',handleCompanyLogoUpload);
   bind('toggleDrag','change',e=>{state.dragEnabled=e.target.checked;applyDragState()});
   bind('toggleGuides','change',e=>{state.guidesEnabled=e.target.checked;if(!e.target.checked)clearGuides()});
-  bind('toggleIconBg','change',e=>{
-    state.iconBgEnabled = e.target.checked;
-    applyElements(); renderA4Sheet(); scheduleSave();
-    const modal = document.getElementById('pngModal');
-    if (modal && modal.classList.contains('active')) previewPNG();
-    toast(e.target.checked ? 'Fundo branco ativado' : 'Ícone transparente', 'success');
-  });
+  bind('toggleIconBg','change',e=>{state.iconBgEnabled=e.target.checked;applyElements();renderA4Sheet();scheduleSave();const m=document.getElementById('pngModal');if(m&&m.classList.contains('active'))previewPNG();toast(e.target.checked?'Fundo branco ativado':'Ícone transparente','success');});
   bind('qrBorderColor','input',e=>{state.qrBorder.color=e.target.value;applyAll()});
   bind('qrBgColor','input',e=>{state.qrBorder.bg=e.target.value;applyAll()});
   bind('labelBorderColor','input',e=>{state.labelBorder.color=e.target.value;applyAll()});
 }
-
 function bindFineTuning(){
   document.querySelectorAll('[data-el][data-prop]').forEach(input => {
-    const elKey = input.dataset.el;
-    const prop = input.dataset.prop;
-    const isRange = input.type === 'range';
-    const isCheck = input.type === 'checkbox';
+    const elKey = input.dataset.el, prop = input.dataset.prop;
+    const isRange = input.type === 'range', isCheck = input.type === 'checkbox';
     input.addEventListener('input', () => {
       let val;
       if (isCheck) val = input.checked;
@@ -830,262 +666,154 @@ function bindFineTuning(){
       if (state[elKey] && typeof state[elKey] === 'object' && !state.el[elKey]) state[elKey][prop] = val;
       else if (state.el[elKey]) state.el[elKey][prop] = val;
       const row = input.closest('.ft-row');
-      if (row) {
-        const valSpan = row.querySelector('.ft-val');
-        if (valSpan) { const suffix = input.dataset.suffix || ''; valSpan.textContent = val + suffix; }
-      }
+      if (row) { const vs = row.querySelector('.ft-val'); if (vs) { const sx = input.dataset.suffix || ''; vs.textContent = val + sx; } }
       applyAll();
     });
   });
 }
 function syncFineTuningUI(){
   document.querySelectorAll('[data-el][data-prop]').forEach(input => {
-    const elKey = input.dataset.el;
-    const prop = input.dataset.prop;
+    const elKey = input.dataset.el, prop = input.dataset.prop;
     let val;
     if (state[elKey] && typeof state[elKey] === 'object' && !state.el[elKey]) val = state[elKey][prop];
     else if (state.el[elKey]) val = state.el[elKey][prop];
     if (val === undefined) return;
-    if (input.type === 'checkbox') input.checked = !!val;
-    else input.value = val;
+    if (input.type === 'checkbox') input.checked = !!val; else input.value = val;
     const row = input.closest('.ft-row');
-    if (row) {
-      const valSpan = row.querySelector('.ft-val');
-      if (valSpan) { const suffix = input.dataset.suffix || ''; valSpan.textContent = val + suffix; }
-    }
+    if (row) { const vs = row.querySelector('.ft-val'); if (vs) { const sx = input.dataset.suffix || ''; vs.textContent = val + sx; } }
   });
   const qbc = document.getElementById('qrBorderColor'); if (qbc) qbc.value = state.qrBorder.color;
   const qbg = document.getElementById('qrBgColor'); if (qbg) qbg.value = state.qrBorder.bg;
   const lbc = document.getElementById('labelBorderColor'); if (lbc) lbc.value = state.labelBorder.color;
 }
-
-function applyAll(){
-  applyLabelBase();
-  applyElements();
-  applyQrStyles();
-  updatePreviewLabelSize();
-  renderA4Sheet();
-  scheduleSave();
-}
-
+function applyAll(){ applyLabelBase(); applyElements(); applyQrStyles(); updatePreviewLabelSize(); renderA4Sheet(); scheduleSave(); }
 function applyLabelBase(){
-  const label = document.getElementById('liveLabel');
-  if (!label) return;
-  if (state.backgroundType === 'transparent') {
-    label.style.backgroundColor = 'transparent';
-    label.style.boxShadow = 'inset 0 0 0 1px rgba(148,163,184,.4)';
-  } else {
-    label.style.backgroundColor = state.bgColor;
-    label.style.boxShadow = '0 8px 25px -5px rgba(0,0,0,.5)';
-  }
+  const label = document.getElementById('liveLabel'); if (!label) return;
+  if (state.backgroundType === 'transparent') { label.style.backgroundColor = 'transparent'; label.style.boxShadow = 'inset 0 0 0 1px rgba(148,163,184,.4)'; }
+  else { label.style.backgroundColor = state.bgColor; label.style.boxShadow = '0 8px 25px -5px rgba(0,0,0,.5)'; }
   let radius = state.labelBorder.radius;
   if (state.shape === 'circle') radius = 9999;
   else if (state.shape === 'square') radius = 0;
   label.style.borderRadius = 'calc(' + radius + 'px * var(--u))';
-  label.style.border = state.labelBorder.width > 0
-    ? 'calc(' + state.labelBorder.width + 'px * var(--u)) ' + state.labelBorder.style + ' ' + state.labelBorder.color
-    : 'none';
+  label.style.border = state.labelBorder.width > 0 ? 'calc(' + state.labelBorder.width + 'px * var(--u)) ' + state.labelBorder.style + ' ' + state.labelBorder.color : 'none';
 }
-
 function applyElements(){
   const u = 'var(--u)';
   const $ = id => document.getElementById(id);
-
   const elTitle = $('elTitle');
   if (elTitle) {
     const t = state.el.title;
-    elTitle.style.left = t.x + '%';
-    elTitle.style.top = t.y + '%';
-    elTitle.style.fontSize = 'calc(' + t.size + 'px * ' + u + ')';
-    elTitle.style.fontWeight = t.weight;
+    elTitle.style.left = t.x + '%'; elTitle.style.top = t.y + '%';
+    elTitle.style.fontSize = 'calc(' + t.size + 'px * ' + u + ')'; elTitle.style.fontWeight = t.weight;
     elTitle.classList.toggle('hidden-el', !t.visible);
-    const titleE = $('labelTitleE'), titleT = $('labelTitleText');
-    if (titleE) titleE.style.color = state.titleEColor;
-    if (titleT) titleT.style.color = state.textColor;
-    const titleStr = state.title || '';
-    if (/^i-/i.test(titleStr)) {
-      titleE.textContent = titleStr.substring(0,2);
-      titleT.textContent = titleStr.substring(2);
-    } else {
-      titleE.textContent = '';
-      titleT.textContent = titleStr;
-    }
+    const tE = $('labelTitleE'), tT = $('labelTitleText');
+    if (tE) tE.style.color = state.titleEColor; if (tT) tT.style.color = state.textColor;
+    const s = state.title || '';
+    if (/^i-/i.test(s)) { tE.textContent = s.substring(0,2); tT.textContent = s.substring(2); }
+    else { tE.textContent = ''; tT.textContent = s; }
   }
-
   const elQR = $('elQR');
   if (elQR) {
     const q = state.el.qr;
-    elQR.style.left = q.x + '%';
-    elQR.style.top = q.y + '%';
+    elQR.style.left = q.x + '%'; elQR.style.top = q.y + '%';
     elQR.classList.toggle('hidden-el', !q.visible);
-    const qrBox = $('qrBox');
-    if (qrBox) {
-      qrBox.style.width = 'calc(' + q.size + 'px * ' + u + ')';
-      qrBox.style.height = 'calc(' + q.size + 'px * ' + u + ')';
-      qrBox.style.padding = 'calc(' + state.qrBorder.padding + 'px * ' + u + ')';
-      qrBox.style.borderRadius = 'calc(' + state.qrBorder.radius + 'px * ' + u + ')';
-      qrBox.style.borderWidth = state.qrBorder.width > 0 ? 'calc(' + state.qrBorder.width + 'px * ' + u + ')' : '0';
-      qrBox.style.borderStyle = state.qrBorder.style;
-      qrBox.style.borderColor = state.qrBorder.color;
-      qrBox.style.backgroundColor = state.backgroundType === 'transparent' ? 'transparent' : state.qrBorder.bg;
+    const qb = $('qrBox');
+    if (qb) {
+      qb.style.width = 'calc(' + q.size + 'px * ' + u + ')'; qb.style.height = 'calc(' + q.size + 'px * ' + u + ')';
+      qb.style.padding = 'calc(' + state.qrBorder.padding + 'px * ' + u + ')';
+      qb.style.borderRadius = 'calc(' + state.qrBorder.radius + 'px * ' + u + ')';
+      qb.style.borderWidth = state.qrBorder.width > 0 ? 'calc(' + state.qrBorder.width + 'px * ' + u + ')' : '0';
+      qb.style.borderStyle = state.qrBorder.style; qb.style.borderColor = state.qrBorder.color;
+      qb.style.backgroundColor = state.backgroundType === 'transparent' ? 'transparent' : state.qrBorder.bg;
     }
   }
-
-  const qrIcon = $('qrCenterIcon');
-  if (qrIcon) {
-    if (state.qrIconSrc && state.el.qrIcon.visible) {
-      qrIcon.src = state.qrIconSrc;
-      qrIcon.classList.remove('hidden');
-    } else {
-      qrIcon.classList.add('hidden');
-    }
-    if (state.iconBgEnabled === true) qrIcon.classList.add('has-white-bg');
-    else qrIcon.classList.remove('has-white-bg');
-    qrIcon.style.width = 'calc(' + state.el.qrIcon.size + 'px * ' + u + ')';
-    qrIcon.style.height = 'calc(' + state.el.qrIcon.size + 'px * ' + u + ')';
+  const qi = $('qrCenterIcon');
+  if (qi) {
+    if (state.qrIconSrc && state.el.qrIcon.visible) { qi.src = state.qrIconSrc; qi.classList.remove('hidden'); } else { qi.classList.add('hidden'); }
+    if (state.iconBgEnabled === true) qi.classList.add('has-white-bg'); else qi.classList.remove('has-white-bg');
+    qi.style.width = 'calc(' + state.el.qrIcon.size + 'px * ' + u + ')';
+    qi.style.height = 'calc(' + state.el.qrIcon.size + 'px * ' + u + ')';
   }
-
-  const elBrand = $('elBrand');
-  if (elBrand) {
+  const eb = $('elBrand');
+  if (eb) {
     const b = state.el.brand;
-    elBrand.style.left = b.x + '%';
-    elBrand.style.top = b.y + '%';
-    elBrand.classList.toggle('hidden-el', !b.visible);
-
-    const textGroup = $('companyTextGroup');
-    const logo = $('companyCustomLogo');
-    const badge = $('brandBadge');
-    const inlineLogo = $('brandInlineLogo');
-
+    eb.style.left = b.x + '%'; eb.style.top = b.y + '%';
+    eb.classList.toggle('hidden-el', !b.visible);
+    const tg = $('companyTextGroup'), lg = $('companyCustomLogo'), bd = $('brandBadge'), il = $('brandInlineLogo');
     if (b.showLogo && state.companyLogoSrc) {
-      logo.src = state.companyLogoSrc;
-      logo.classList.add('active');
-      logo.style.height = 'calc(' + state.el.companyLogo.size + 'px * ' + u + ')';
-      logo.style.maxWidth = 'calc(' + (state.el.companyLogo.size * 5) + 'px * ' + u + ')';
-    } else {
-      logo.classList.remove('active');
-      logo.removeAttribute('src');
-    }
-    if (b.showText) textGroup.classList.remove('hidden');
-    else textGroup.classList.add('hidden');
-
-    const subC = $('labelSubCompany');
-    if (subC) {
-      subC.textContent = state.subCompany;
-      subC.style.color = state.textColor;
-      subC.style.fontSize = 'calc(' + state.el.subCompany.size + 'px * ' + u + ')';
-      subC.style.fontWeight = state.el.subCompany.weight;
-      subC.classList.toggle('hidden', !state.el.subCompany.visible);
-    }
-
-    const mode = b.badgeMode || 'letter';
-    const badgeSizePx = state.el.brandBadge.size;
-    badge.style.display = 'none';
-    inlineLogo.style.display = 'none';
-
+      lg.src = state.companyLogoSrc; lg.classList.add('active');
+      lg.style.height = 'calc(' + state.el.companyLogo.size + 'px * ' + u + ')';
+      lg.style.maxWidth = 'calc(' + (state.el.companyLogo.size * 5) + 'px * ' + u + ')';
+    } else { lg.classList.remove('active'); lg.removeAttribute('src'); }
+    if (b.showText) tg.classList.remove('hidden'); else tg.classList.add('hidden');
+    const sc = $('labelSubCompany');
+    if (sc) { sc.textContent = state.subCompany; sc.style.color = state.textColor; sc.style.fontSize = 'calc(' + state.el.subCompany.size + 'px * ' + u + ')'; sc.style.fontWeight = state.el.subCompany.weight; sc.classList.toggle('hidden', !state.el.subCompany.visible); }
+    const mode = b.badgeMode || 'letter'; const bpx = state.el.brandBadge.size;
+    bd.style.display = 'none'; il.style.display = 'none';
     if (state.el.brandBadge.visible && mode === 'letter') {
-      badge.style.display = 'flex';
-      badge.style.width = 'calc(' + badgeSizePx + 'px * ' + u + ')';
-      badge.style.height = 'calc(' + badgeSizePx + 'px * ' + u + ')';
-      badge.style.fontSize = 'calc(' + (badgeSizePx * 0.6) + 'px * ' + u + ')';
+      bd.style.display = 'flex';
+      bd.style.width = 'calc(' + bpx + 'px * ' + u + ')'; bd.style.height = 'calc(' + bpx + 'px * ' + u + ')';
+      bd.style.fontSize = 'calc(' + (bpx * 0.6) + 'px * ' + u + ')';
     } else if (state.el.brandBadge.visible && mode === 'logo' && state.companyLogoSrc) {
-      inlineLogo.src = state.companyLogoSrc;
-      inlineLogo.style.display = 'block';
-      inlineLogo.style.height = 'calc(' + badgeSizePx + 'px * ' + u + ')';
-      inlineLogo.style.maxWidth = 'calc(' + (badgeSizePx * 4) + 'px * ' + u + ')';
+      il.src = state.companyLogoSrc; il.style.display = 'block';
+      il.style.height = 'calc(' + bpx + 'px * ' + u + ')';
+      il.style.maxWidth = 'calc(' + (bpx * 4) + 'px * ' + u + ')';
     } else if (state.el.brandBadge.visible && mode === 'logo' && !state.companyLogoSrc) {
-      badge.style.display = 'flex';
-      badge.style.width = 'calc(' + badgeSizePx + 'px * ' + u + ')';
-      badge.style.height = 'calc(' + badgeSizePx + 'px * ' + u + ')';
-      badge.style.fontSize = 'calc(' + (badgeSizePx * 0.6) + 'px * ' + u + ')';
+      bd.style.display = 'flex';
+      bd.style.width = 'calc(' + bpx + 'px * ' + u + ')'; bd.style.height = 'calc(' + bpx + 'px * ' + u + ')';
+      bd.style.fontSize = 'calc(' + (bpx * 0.6) + 'px * ' + u + ')';
     }
-
-    const companyName = $('labelCompanyName');
-    if (companyName) {
-      companyName.textContent = state.companyName;
-      companyName.style.color = state.textColor;
-      companyName.style.fontSize = 'calc(' + state.el.companyName.size + 'px * ' + u + ')';
-      companyName.style.fontWeight = state.el.companyName.weight;
-      companyName.classList.toggle('hidden', !state.el.companyName.visible);
-    }
+    const cn = $('labelCompanyName');
+    if (cn) { cn.textContent = state.companyName; cn.style.color = state.textColor; cn.style.fontSize = 'calc(' + state.el.companyName.size + 'px * ' + u + ')'; cn.style.fontWeight = state.el.companyName.weight; cn.classList.toggle('hidden', !state.el.companyName.visible); }
   }
-
-  const elSub = $('elSubtitle');
-  if (elSub) {
+  const es = $('elSubtitle');
+  if (es) {
     const s = state.el.subtitle;
-    elSub.style.left = s.x + '%';
-    elSub.style.top = s.y + '%';
-    elSub.classList.toggle('hidden-el', !s.visible);
-    const sub = $('labelSubtitle');
-    if (sub) {
-      sub.textContent = state.subtitle;
-      sub.style.color = state.textColor;
-      sub.style.fontSize = 'calc(' + s.size + 'px * ' + u + ')';
-      sub.style.fontWeight = s.weight;
-    }
+    es.style.left = s.x + '%'; es.style.top = s.y + '%';
+    es.classList.toggle('hidden-el', !s.visible);
+    const sb = $('labelSubtitle');
+    if (sb) { sb.textContent = state.subtitle; sb.style.color = state.textColor; sb.style.fontSize = 'calc(' + s.size + 'px * ' + u + ')'; sb.style.fontWeight = s.weight; }
   }
 }
-
 function applyQrStyles(){
-  const qrBox = document.getElementById('qrBox');
-  if (!qrBox) return;
-  qrBox.style.borderRadius = 'calc(' + state.qrBorder.radius + 'px * var(--u))';
-  qrBox.style.borderColor = state.qrBorder.color;
-  qrBox.style.backgroundColor = state.backgroundType === 'transparent' ? 'transparent' : state.qrBorder.bg;
+  const qb = document.getElementById('qrBox'); if (!qb) return;
+  qb.style.borderRadius = 'calc(' + state.qrBorder.radius + 'px * var(--u))';
+  qb.style.borderColor = state.qrBorder.color;
+  qb.style.backgroundColor = state.backgroundType === 'transparent' ? 'transparent' : state.qrBorder.bg;
 }
-
-/* Atualiza tamanho e escala do label de preview conforme mm e rotação */
 function updatePreviewLabelSize(){
   const label = document.getElementById('liveLabel');
   const wrap = document.getElementById('singleLabelWrapper');
   if (!label || !wrap) return;
-
-  let lw = state.labelWidthMm;
-  let lh = state.labelHeightMm;
+  let lw = state.labelWidthMm, lh = state.labelHeightMm;
   if (state.labelRotation === 90) [lw, lh] = [lh, lw];
-
   const ar = lw / lh;
-
   const maxW = Math.min(380, Math.max(180, wrap.clientWidth - 60));
   const maxH = 440;
-
-  let w = maxW;
-  let h = w / ar;
+  let w = maxW, h = w / ar;
   if (h > maxH) { h = maxH; w = h * ar; }
-
-  label.style.width = w + 'px';
-  label.style.height = h + 'px';
-  label.style.aspectRatio = '';
-
+  label.style.width = w + 'px'; label.style.height = h + 'px'; label.style.aspectRatio = '';
   const minDim = Math.min(w, h);
   label.style.setProperty('--u', (minDim / BASE_LABEL_PX).toFixed(4));
-
-  /* Info */
   const info = document.getElementById('lblPreviewSize');
-  if (info) info.textContent = lw + '×' + lh + ' mm' + (state.labelRotation === 90 ? ' (rotacionado)' : '');
+  if (info) info.textContent = lw + '×' + lh + ' mm' + (state.labelRotation === 90 ? ' (rot.)' : '');
 }
 
-/* ============ GUIAS ============ */
 const guidePool = { v: [], h: [], dots: [] };
 function initGuidePool(){
-  const layer = document.getElementById('guideLayer');
-  if (!layer) return;
+  const layer = document.getElementById('guideLayer'); if (!layer) return;
   layer.innerHTML = '';
   guidePool.v = []; guidePool.h = []; guidePool.dots = [];
   for (let i = 0; i < 10; i++) { const g = document.createElement('div'); g.className = 'guide guide-v'; layer.appendChild(g); guidePool.v.push(g); }
   for (let i = 0; i < 10; i++) { const g = document.createElement('div'); g.className = 'guide guide-h'; layer.appendChild(g); guidePool.h.push(g); }
   for (let i = 0; i < 24; i++) { const d = document.createElement('div'); d.className = 'guide-dot'; layer.appendChild(d); guidePool.dots.push(d); }
 }
-function renderGuides(vLines, hLines, dots){
-  guidePool.v.forEach((g, i) => { if (i < vLines.length) { g.style.left = vLines[i] + '%'; g.style.display = 'block'; } else g.style.display = 'none'; });
-  guidePool.h.forEach((g, i) => { if (i < hLines.length) { g.style.top = hLines[i] + '%'; g.style.display = 'block'; } else g.style.display = 'none'; });
-  guidePool.dots.forEach((d, i) => { if (i < dots.length) { d.style.left = dots[i].x + '%'; d.style.top = dots[i].y + '%'; d.style.display = 'block'; } else d.style.display = 'none'; });
+function renderGuides(vL, hL, ds){
+  guidePool.v.forEach((g,i) => { if (i < vL.length) { g.style.left = vL[i] + '%'; g.style.display = 'block'; } else g.style.display = 'none'; });
+  guidePool.h.forEach((g,i) => { if (i < hL.length) { g.style.top = hL[i] + '%'; g.style.display = 'block'; } else g.style.display = 'none'; });
+  guidePool.dots.forEach((d,i) => { if (i < ds.length) { d.style.left = ds[i].x + '%'; d.style.top = ds[i].y + '%'; d.style.display = 'block'; } else d.style.display = 'none'; });
 }
-function clearGuides(){
-  guidePool.v.forEach(g => g.style.display = 'none');
-  guidePool.h.forEach(g => g.style.display = 'none');
-  guidePool.dots.forEach(d => d.style.display = 'none');
-}
+function clearGuides(){ guidePool.v.forEach(g => g.style.display = 'none'); guidePool.h.forEach(g => g.style.display = 'none'); guidePool.dots.forEach(d => d.style.display = 'none'); }
 
 function makeAllDraggable(){
   document.querySelectorAll('#liveLabel .itq-el[data-el-key]').forEach(el => el.addEventListener('pointerdown', onDragStart));
@@ -1099,19 +827,18 @@ function applyDragState(){
 }
 function getSnapTargets(excludeKey){
   const xs = [50], ys = [50];
-  Object.entries(state.el).forEach(([key, el]) => {
-    if (key === excludeKey) return;
+  Object.entries(state.el).forEach(([k, el]) => {
+    if (k === excludeKey) return;
     if (el.x !== undefined && el.visible !== false) xs.push(el.x);
     if (el.y !== undefined && el.visible !== false) ys.push(el.y);
   });
-  const dedupe = (arr) => { const out = []; arr.forEach(v => { if (!out.some(o => Math.abs(o - v) < 0.5)) out.push(v); }); return out.sort((a,b)=>a-b); };
-  return { x: dedupe(xs), y: dedupe(ys) };
+  const dd = arr => { const out = []; arr.forEach(v => { if (!out.some(o => Math.abs(o-v) < 0.5)) out.push(v); }); return out.sort((a,b)=>a-b); };
+  return { x: dd(xs), y: dd(ys) };
 }
 function onDragStart(e){
   if (!state.dragEnabled) return;
   if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
-  const el = e.currentTarget;
-  const key = el.dataset.elKey;
+  const el = e.currentTarget, key = el.dataset.elKey;
   const label = document.getElementById('liveLabel');
   const rect = label.getBoundingClientRect();
   e.preventDefault();
@@ -1122,26 +849,22 @@ function onDragStart(e){
   const mirror = state.isMirrored ? -1 : 1;
   const threshold = 2.2;
   const targets = state.guidesEnabled ? getSnapTargets(key) : null;
-
   const onMove = ev => {
     const dx = ((ev.clientX - startX) / rect.width) * 100 * mirror;
     const dy = ((ev.clientY - startY) / rect.height) * 100;
-    let newX = Math.max(-10, Math.min(110, startPos.x + dx));
-    let newY = Math.max(-10, Math.min(110, startPos.y + dy));
+    let nX = Math.max(-10, Math.min(110, startPos.x + dx));
+    let nY = Math.max(-10, Math.min(110, startPos.y + dy));
     if (state.guidesEnabled && targets) {
-      const mX = targets.x.filter(t => Math.abs(newX - t) <= threshold);
-      const mY = targets.y.filter(t => Math.abs(newY - t) <= threshold);
-      if (mX.length > 0) { let b = mX[0]; mX.forEach(t => { if (Math.abs(t - newX) < Math.abs(b - newX)) b = t; }); newX = b; }
-      if (mY.length > 0) { let b = mY[0]; mY.forEach(t => { if (Math.abs(t - newY) < Math.abs(b - newY)) b = t; }); newY = b; }
-      const dots = [];
-      mX.forEach(x => mY.forEach(y => dots.push({x,y})));
-      if (dots.length === 0 && (mX.length > 0 || mY.length > 0)) dots.push({x:newX,y:newY});
-      renderGuides(mX, mY, dots);
+      const mX = targets.x.filter(t => Math.abs(nX - t) <= threshold);
+      const mY = targets.y.filter(t => Math.abs(nY - t) <= threshold);
+      if (mX.length > 0) { let b = mX[0]; mX.forEach(t => { if (Math.abs(t-nX) < Math.abs(b-nX)) b = t; }); nX = b; }
+      if (mY.length > 0) { let b = mY[0]; mY.forEach(t => { if (Math.abs(t-nY) < Math.abs(b-nY)) b = t; }); nY = b; }
+      const ds = []; mX.forEach(x => mY.forEach(y => ds.push({x,y})));
+      if (ds.length === 0 && (mX.length > 0 || mY.length > 0)) ds.push({x:nX,y:nY});
+      renderGuides(mX, mY, ds);
     } else clearGuides();
-    state.el[key].x = newX;
-    state.el[key].y = newY;
-    el.style.left = newX + '%';
-    el.style.top = newY + '%';
+    state.el[key].x = nX; state.el[key].y = nY;
+    el.style.left = nX + '%'; el.style.top = nY + '%';
   };
   const onUp = () => {
     el.classList.remove('dragging'); clearGuides();
@@ -1149,9 +872,7 @@ function onDragStart(e){
     el.removeEventListener('pointerup', onUp);
     el.removeEventListener('pointercancel', onUp);
     try { el.releasePointerCapture(e.pointerId); } catch(_){}
-    syncFineTuningUI();
-    renderA4Sheet();
-    scheduleSave();
+    syncFineTuningUI(); renderA4Sheet(); scheduleSave();
   };
   el.addEventListener('pointermove', onMove);
   el.addEventListener('pointerup', onUp);
@@ -1160,8 +881,7 @@ function onDragStart(e){
 
 function regenerateQR(){ generateQRCode(); }
 function generateQRCode(){
-  const container = document.getElementById('qrcodeCanvas');
-  if (!container) return;
+  const container = document.getElementById('qrcodeCanvas'); if (!container) return;
   container.innerHTML = '';
   const transparent = state.backgroundType === 'transparent';
   const lightColor = transparent ? 'rgba(255,255,255,0)' : '#ffffff';
@@ -1172,21 +892,15 @@ function generateQRCode(){
     if (canvas) {
       const out = document.createElement('img');
       out.src = canvas.toDataURL('image/png');
-      out.alt = 'QR';
-      out.style.width = '100%';
-      out.style.height = '100%';
-      out.style.display = 'block';
+      out.alt = 'QR'; out.style.width = '100%'; out.style.height = '100%'; out.style.display = 'block';
       container.appendChild(out);
     }
-    applyElements();
-    renderA4Sheet();
+    applyElements(); renderA4Sheet();
   });
 }
-
 function setMirrorMode(mirror){
   state.isMirrored = mirror;
-  const btnN = document.getElementById('btnNormalMode'), btnM = document.getElementById('btnMirrorMode');
-  const badge = document.getElementById('mirrorBadge');
+  const btnN = document.getElementById('btnNormalMode'), btnM = document.getElementById('btnMirrorMode'), badge = document.getElementById('mirrorBadge');
   if (mirror) {
     btnM.className = "p-2.5 rounded-lg border text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20";
     btnN.className = "p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all";
@@ -1198,54 +912,35 @@ function setMirrorMode(mirror){
   }
   const label = document.getElementById('liveLabel');
   label.classList.toggle('mirrored', mirror);
-  renderA4Sheet();
-  scheduleSave();
+  renderA4Sheet(); scheduleSave();
 }
-
 function stripWhiteFromIcon(){
   if (!state.qrIconSrc) { toast('Nenhum ícone carregado', 'error'); return; }
   if (state.qrIconSrc.startsWith('data:image/svg')) { toast('SVG já é transparente'); return; }
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
+  const img = new Image(); img.crossOrigin = 'anonymous';
   img.onload = () => {
     try {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      const threshold = 240;
-      let removed = 0;
-      const total = data.length / 4;
-      for (let i = 0; i < data.length; i += 4) {
-        if (data[i+3] > 0 && data[i] >= threshold && data[i+1] >= threshold && data[i+2] >= threshold) {
-          data[i+3] = 0;
-          removed++;
-        }
+      const c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight;
+      const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0);
+      const id = ctx.getImageData(0, 0, c.width, c.height), d = id.data;
+      const th = 240; let rem = 0; const tot = d.length / 4;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i+3] > 0 && d[i] >= th && d[i+1] >= th && d[i+2] >= th) { d[i+3] = 0; rem++; }
       }
-      ctx.putImageData(imageData, 0, 0);
-      state.qrIconSrc = canvas.toDataURL('image/png');
+      ctx.putImageData(id, 0, 0);
+      state.qrIconSrc = c.toDataURL('image/png');
       applyElements(); renderA4Sheet(); scheduleSave();
-      const modal = document.getElementById('pngModal');
-      if (modal && modal.classList.contains('active')) previewPNG();
-      const pct = ((removed / total) * 100).toFixed(1);
-      toast('Fundo removido (' + pct + '%)', 'success');
+      const m = document.getElementById('pngModal'); if (m && m.classList.contains('active')) previewPNG();
+      toast('Fundo removido (' + ((rem/tot)*100).toFixed(1) + '%)', 'success');
     } catch(err) { toast('Erro ao processar', 'error'); }
   };
   img.onerror = () => toast('Falha ao carregar', 'error');
   img.src = state.qrIconSrc;
 }
-
 function handleQrIconUpload(e){
   const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
-    state.qrIconSrc = ev.target.result;
-    applyElements(); renderA4Sheet(); scheduleSave();
-    toast('Ícone carregado');
-  };
+  reader.onload = ev => { state.qrIconSrc = ev.target.result; applyElements(); renderA4Sheet(); scheduleSave(); toast('Ícone carregado'); };
   reader.readAsDataURL(file);
 }
 function removeQrIcon(){ state.qrIconSrc = null; applyElements(); renderA4Sheet(); scheduleSave(); }
@@ -1257,169 +952,108 @@ function handleCompanyLogoUpload(e){
 }
 function removeCompanyLogo(){ state.companyLogoSrc = null; applyElements(); renderA4Sheet(); scheduleSave(); }
 
-/* =========================================================
-   CÁLCULO DE LAYOUT A4 (mm, orientação, cols/rows manuais)
-========================================================= */
 function calculateA4Layout(){
-  const PAGE_W = 210, PAGE_H = 297;
-  const padMm = state.pageMarginMm;
-  const usableW = PAGE_W - 2 * padMm;
-  const usableH = PAGE_H - 2 * padMm;
-  const minGap = state.labelGapMm;
-
-  let lw = state.labelWidthMm;
-  let lh = state.labelHeightMm;
+  const P_W = 210, P_H = 297;
+  const pad = state.pageMarginMm;
+  const uW = P_W - 2 * pad, uH = P_H - 2 * pad;
+  const mg = state.labelGapMm;
+  let lw = state.labelWidthMm, lh = state.labelHeightMm;
   if (state.labelRotation === 90) [lw, lh] = [lh, lw];
-
   let cols, rows;
-  const fc = state.forcedCols || 0;
-  const fr = state.forcedRows || 0;
-
+  const fc = state.forcedCols || 0, fr = state.forcedRows || 0;
   if (fc > 0 && fr > 0) {
     cols = fc; rows = fr;
-    const maxLw = (usableW - (cols - 1) * minGap) / cols;
-    const maxLh = (usableH - (rows - 1) * minGap) / rows;
-    const scale = Math.min(maxLw / lw, maxLh / lh, 1);
-    lw *= scale; lh *= scale;
+    const mLw = (uW - (cols - 1) * mg) / cols;
+    const mLh = (uH - (rows - 1) * mg) / rows;
+    const sc = Math.min(mLw / lw, mLh / lh, 1);
+    lw *= sc; lh *= sc;
   } else if (fc > 0) {
     cols = fc;
-    const maxLw = (usableW - (cols - 1) * minGap) / cols;
-    const scale = Math.min(maxLw / lw, 1);
-    lw *= scale; lh *= scale;
-    rows = Math.max(1, Math.floor((usableH + minGap) / (lh + minGap)));
+    const mLw = (uW - (cols - 1) * mg) / cols;
+    const sc = Math.min(mLw / lw, 1);
+    lw *= sc; lh *= sc;
+    rows = Math.max(1, Math.floor((uH + mg) / (lh + mg)));
   } else if (fr > 0) {
     rows = fr;
-    const maxLh = (usableH - (rows - 1) * minGap) / rows;
-    const scale = Math.min(maxLh / lh, 1);
-    lw *= scale; lh *= scale;
-    cols = Math.max(1, Math.floor((usableW + minGap) / (lw + minGap)));
+    const mLh = (uH - (rows - 1) * mg) / rows;
+    const sc = Math.min(mLh / lh, 1);
+    lw *= sc; lh *= sc;
+    cols = Math.max(1, Math.floor((uW + mg) / (lw + mg)));
   } else {
-    cols = Math.max(1, Math.floor((usableW + minGap) / (lw + minGap)));
-    rows = Math.max(1, Math.floor((usableH + minGap) / (lh + minGap)));
+    cols = Math.max(1, Math.floor((uW + mg) / (lw + mg)));
+    rows = Math.max(1, Math.floor((uH + mg) / (lh + mg)));
   }
-
-  cols = Math.max(1, cols);
-  rows = Math.max(1, rows);
-
-  let gapX, gapY;
+  cols = Math.max(1, cols); rows = Math.max(1, rows);
+  let gx, gy;
   if (state.distribution === 'stretch') {
-    gapX = cols > 1 ? (usableW - cols * lw) / (cols - 1) : 0;
-    gapY = rows > 1 ? (usableH - rows * lh) / (rows - 1) : 0;
-  } else {
-    gapX = minGap; gapY = minGap;
-  }
-  gapX = Math.max(minGap, gapX);
-  gapY = Math.max(minGap, gapY);
-
-  return { labelW: lw, labelH: lh, cols, rows, gapX, gapY, padMm, usableW, usableH, pageW: PAGE_W, pageH: PAGE_H };
+    gx = cols > 1 ? (uW - cols * lw) / (cols - 1) : 0;
+    gy = rows > 1 ? (uH - rows * lh) / (rows - 1) : 0;
+  } else { gx = mg; gy = mg; }
+  gx = Math.max(mg, gx); gy = Math.max(mg, gy);
+  return { labelW: lw, labelH: lh, cols, rows, gapX: gx, gapY: gy, padMm: pad, usableW: uW, usableH: uH, pageW: P_W, pageH: P_H };
 }
-
 function renderA4Sheet(){
   const container = document.getElementById('a4Page');
   const source = document.getElementById('liveLabel');
   if (!container || !source) return;
-
   const lay = calculateA4Layout();
-
   container.innerHTML = '';
   container.style.padding = lay.padMm + 'mm';
-
   if (state.distribution === 'stretch') {
     container.style.justifyContent = lay.cols > 1 ? 'space-between' : 'center';
     container.style.alignContent = lay.rows > 1 ? 'space-between' : 'center';
-  } else {
-    container.style.justifyContent = 'center';
-    container.style.alignContent = 'center';
-  }
-
+  } else { container.style.justifyContent = 'center'; container.style.alignContent = 'center'; }
   const total = lay.cols * lay.rows;
-  const minDimMm = Math.min(lay.labelW, lay.labelH);
-  const u = (minDimMm * MM_TO_PX) / BASE_LABEL_PX;
-
+  const minDim = Math.min(lay.labelW, lay.labelH);
+  const u = (minDim * MM_TO_PX) / BASE_LABEL_PX;
   for (let i = 0; i < total; i++) {
-    const col = i % lay.cols;
-    const row = Math.floor(i / lay.cols);
+    const col = i % lay.cols, row = Math.floor(i / lay.cols);
     const item = document.createElement('div');
     item.className = 'a4-item';
-    item.style.width = lay.labelW + 'mm';
-    item.style.height = lay.labelH + 'mm';
-
+    item.style.width = lay.labelW + 'mm'; item.style.height = lay.labelH + 'mm';
     if (state.distribution === 'center') {
       item.style.marginRight = (col === lay.cols - 1) ? 0 : lay.gapX + 'mm';
       item.style.marginBottom = (row === lay.rows - 1) ? 0 : lay.gapY + 'mm';
     }
-
     const clone = source.cloneNode(true);
-    /* Remove IDs (para não duplicar), mas classes permanecem → CSS funciona */
     clone.removeAttribute('id');
     clone.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
     clone.querySelectorAll('.guide-layer, .guide, .guide-dot').forEach(n => n.remove());
-    clone.style.width = '100%';
-    clone.style.height = '100%';
-    clone.style.aspectRatio = '';
-    clone.style.boxShadow = 'none';
-    clone.style.margin = '0';
+    clone.style.width = '100%'; clone.style.height = '100%'; clone.style.aspectRatio = '';
+    clone.style.boxShadow = 'none'; clone.style.margin = '0';
     clone.style.setProperty('--u', u.toFixed(4));
-
-    clone.querySelectorAll('.draggable, .dragging, .locked').forEach(n => {
-      n.classList.remove('draggable', 'dragging', 'locked');
-    });
-
+    clone.querySelectorAll('.draggable, .dragging, .locked').forEach(n => n.classList.remove('draggable', 'dragging', 'locked'));
     item.appendChild(clone);
     container.appendChild(item);
   }
-
-  const filledPct = ((lay.cols * lay.labelW * lay.rows * lay.labelH) / (lay.pageW * lay.pageH) * 100).toFixed(1);
+  const fillPct = ((lay.cols * lay.labelW * lay.rows * lay.labelH) / (lay.pageW * lay.pageH) * 100).toFixed(1);
   document.getElementById('lblCalculatedCount').innerText = total + ' un. (' + lay.cols + '×' + lay.rows + ')';
   document.getElementById('lblEffectiveSize').innerText = lay.labelW.toFixed(1) + '×' + lay.labelH.toFixed(1) + ' mm';
-  document.getElementById('lblFillPercent').innerText = filledPct + '%';
-  const info = document.getElementById('a4LayoutInfo');
-  if (info) info.textContent = lay.cols + '×' + lay.rows;
-
+  document.getElementById('lblFillPercent').innerText = fillPct + '%';
+  const inf = document.getElementById('a4LayoutInfo'); if (inf) inf.textContent = lay.cols + '×' + lay.rows;
   fitA4Sheet();
 }
-
 function fitA4Sheet(){
-  const viewport = document.getElementById('a4Viewport');
-  const scaler = document.getElementById('a4Scaler');
-  const page = document.getElementById('a4Page');
-  if (!viewport || !scaler || !page) return;
-  if (viewport.offsetParent === null) return;
-  const pageW = page.offsetWidth || (210 * MM_TO_PX);
-  const pageH = page.offsetHeight || (297 * MM_TO_PX);
-  const availW = viewport.clientWidth;
-  const scale = Math.min(1, availW / pageW);
-  scaler.style.width = pageW + 'px';
-  scaler.style.height = (pageH * scale) + 'px';
-  scaler.style.transformOrigin = 'top center';
-  scaler.style.transform = 'scale(' + scale + ')';
-  viewport.style.height = (pageH * scale) + 'px';
-  const info = document.getElementById('a4ZoomInfo');
-  if (info) info.textContent = Math.round(scale * 100) + '%';
+  const vp = document.getElementById('a4Viewport'), sc = document.getElementById('a4Scaler'), pg = document.getElementById('a4Page');
+  if (!vp || !sc || !pg) return;
+  if (vp.offsetParent === null) return;
+  const pw = pg.offsetWidth || (210 * MM_TO_PX);
+  const ph = pg.offsetHeight || (297 * MM_TO_PX);
+  const scale = Math.min(1, vp.clientWidth / pw);
+  sc.style.width = pw + 'px'; sc.style.height = (ph * scale) + 'px';
+  sc.style.transformOrigin = 'top center';
+  sc.style.transform = 'scale(' + scale + ')';
+  vp.style.height = (ph * scale) + 'px';
+  const info = document.getElementById('a4ZoomInfo'); if (info) info.textContent = Math.round(scale * 100) + '%';
 }
-
 function switchTab(tab){
-  const viewSingle = document.getElementById('viewSingle');
-  const viewA4 = document.getElementById('viewA4');
-  const btnPreview = document.getElementById('tabBtnPreview');
-  const btnA4 = document.getElementById('tabBtnA4');
-  const activeCls = "flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs font-semibold bg-orange-500 text-white transition-all whitespace-nowrap";
-  const idleCls = "flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white transition-all whitespace-nowrap";
-  if (tab === 'single') {
-    viewSingle.classList.remove('hidden');
-    viewA4.classList.add('hidden');
-    btnPreview.className = activeCls;
-    btnA4.className = idleCls;
-    updatePreviewLabelSize();
-  } else {
-    viewSingle.classList.add('hidden');
-    viewA4.classList.remove('hidden');
-    btnA4.className = activeCls;
-    btnPreview.className = idleCls;
-    requestAnimationFrame(fitA4Sheet);
-  }
+  const vs = document.getElementById('viewSingle'), va = document.getElementById('viewA4');
+  const bp = document.getElementById('tabBtnPreview'), ba = document.getElementById('tabBtnA4');
+  const act = "flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs font-semibold bg-orange-500 text-white transition-all whitespace-nowrap";
+  const idl = "flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white transition-all whitespace-nowrap";
+  if (tab === 'single') { vs.classList.remove('hidden'); va.classList.add('hidden'); bp.className = act; ba.className = idl; updatePreviewLabelSize(); }
+  else { vs.classList.add('hidden'); va.classList.remove('hidden'); ba.className = act; bp.className = idl; requestAnimationFrame(fitA4Sheet); }
 }
-
 function resetFineTuning(){
   state.el = JSON.parse(JSON.stringify(DEFAULT_STATE.el));
   state.labelBorder = JSON.parse(JSON.stringify(DEFAULT_STATE.labelBorder));
@@ -1429,9 +1063,9 @@ function resetFineTuning(){
 function resetAllState(){
   if (!confirm('Resetar TUDO?')) return;
   state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-  syncAllUI(); generateQRCode(); applyAll(); toast('Estado resetado', 'success');
+  document.body.classList.toggle('transparent-print', state.backgroundType === 'transparent');
+  syncAllUI(); generateQRCode(); applyAll(); toast('Resetado', 'success');
 }
-
 let toastTimer;
 function toast(msg, type){
   const el = document.getElementById('toast'), m = document.getElementById('toastMsg');
@@ -1447,221 +1081,225 @@ function toast(msg, type){
 }
 
 /* =========================================================
-   PNG EXPORT
+   HELPERS: carregar imagens e desenhar etiqueta num contexto
 ========================================================= */
-function buildPNGCanvas(){
-  const size = 1000;
-  const canvas = document.createElement('canvas');
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext('2d');
+function loadImage(src){
+  return new Promise((resolve, reject) => {
+    if (!src) return resolve(null);
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+function getQrImageSrc(){
+  const el = document.querySelector('#qrcodeCanvas img, #qrcodeCanvas canvas');
+  if (!el) return null;
+  return el.tagName === 'CANVAS' ? el.toDataURL('image/png') : el.src;
+}
 
-  const S = size / BASE_LABEL_PX;
+/* Desenha UMA etiqueta no contexto, numa área de (w × h) a partir de (ox, oy) */
+function drawLabelOnCanvas(ctx, ox, oy, w, h, A){
+  const S = Math.min(w, h) / BASE_LABEL_PX;
   const transparent = state.backgroundType === 'transparent';
   const iconBg = state.iconBgEnabled === true;
 
   ctx.save();
-  if (state.isMirrored) { ctx.translate(size, 0); ctx.scale(-1, 1); }
+  ctx.translate(ox, oy);
+  if (state.isMirrored) { ctx.translate(w, 0); ctx.scale(-1, 1); }
 
+  /* === Fundo === */
   if (!transparent) {
     ctx.fillStyle = state.bgColor;
-    let r = state.labelBorder.radius;
-    if (state.shape === 'circle') r = size / 2;
-    else if (state.shape === 'square') r = 0;
-    r = r * S;
-    ctx.beginPath();
-    if (r >= size / 2) ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
-    else ctx.roundRect(0, 0, size, size, r);
-    ctx.fill();
+    if (state.shape === 'circle') {
+      ctx.beginPath(); ctx.ellipse(w/2, h/2, w/2, h/2, 0, 0, Math.PI*2); ctx.fill();
+    } else if (state.shape === 'square') {
+      ctx.fillRect(0, 0, w, h);
+    } else {
+      const r = state.labelBorder.radius * S;
+      ctx.beginPath(); ctx.roundRect(0, 0, w, h, r); ctx.fill();
+    }
   }
 
+  /* === Borda da etiqueta === */
   if (state.labelBorder.width > 0) {
-    let r = state.labelBorder.radius;
-    if (state.shape === 'circle') r = size / 2;
-    else if (state.shape === 'square') r = 0;
-    r = r * S;
     const lw = state.labelBorder.width * S;
     ctx.strokeStyle = state.labelBorder.color;
     ctx.lineWidth = lw;
     ctx.setLineDash(state.labelBorder.style === 'dashed' ? [lw*3, lw*2] : state.labelBorder.style === 'dotted' ? [lw, lw*1.5] : []);
     ctx.beginPath();
-    if (r >= size/2) ctx.arc(size/2, size/2, size/2 - lw/2, 0, Math.PI*2);
-    else ctx.roundRect(lw/2, lw/2, size - lw, size - lw, Math.max(0, r - lw/2));
+    if (state.shape === 'circle') ctx.ellipse(w/2, h/2, w/2 - lw/2, h/2 - lw/2, 0, 0, Math.PI*2);
+    else if (state.shape === 'square') ctx.rect(lw/2, lw/2, w - lw, h - lw);
+    else {
+      const r = Math.max(0, state.labelBorder.radius * S - lw/2);
+      ctx.roundRect(lw/2, lw/2, w - lw, h - lw, r);
+    }
     ctx.stroke();
     ctx.setLineDash([]);
   }
 
-  const imgPromises = [];
-
+  /* === Título === */
   if (state.el.title.visible) {
     const t = state.el.title;
-    const cx = (t.x/100) * size, cy = (t.y/100) * size;
+    const cx = (t.x/100) * w, cy = (t.y/100) * h;
     ctx.font = t.weight + ' ' + (t.size * S) + 'px Inter, Arial, sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const titleStr = state.title || '';
-    let parts;
-    if (/^i-/i.test(titleStr)) {
-      parts = [{ txt: titleStr.substring(0,2), color: state.titleEColor }, { txt: titleStr.substring(2), color: state.textColor }];
-    } else parts = [{ txt: titleStr, color: state.textColor }];
-    const totalW = parts.reduce((s,p) => s + ctx.measureText(p.txt).width, 0);
+    const s = state.title || '';
+    const parts = /^i-/i.test(s)
+      ? [{txt: s.substring(0,2), color: state.titleEColor}, {txt: s.substring(2), color: state.textColor}]
+      : [{txt: s, color: state.textColor}];
+    const totalW = parts.reduce((a,p) => a + ctx.measureText(p.txt).width, 0);
     let x = cx - totalW/2;
     parts.forEach(p => { ctx.fillStyle = p.color; ctx.textAlign = 'left'; ctx.fillText(p.txt, x, cy); x += ctx.measureText(p.txt).width; });
   }
 
-  const qrImgEl = document.querySelector('#qrcodeCanvas img, #qrcodeCanvas canvas');
-  if (state.el.qr.visible && qrImgEl) {
+  /* === QR Code === */
+  if (state.el.qr.visible && A.qrImg) {
     const q = state.el.qr;
-    const cx = (q.x/100) * size, cy = (q.y/100) * size;
-    const qSize = q.size * S;
-    const bx = cx - qSize/2, by = cy - qSize/2;
+    const cx = (q.x/100) * w, cy = (q.y/100) * h;
+    const qs = q.size * S;
+    const bx = cx - qs/2, by = cy - qs/2;
     const bw = state.qrBorder.width * S;
     const bRad = state.qrBorder.radius * S;
     if (!transparent) {
       ctx.fillStyle = state.qrBorder.bg;
-      ctx.beginPath(); ctx.roundRect(bx, by, qSize, qSize, bRad); ctx.fill();
+      ctx.beginPath(); ctx.roundRect(bx, by, qs, qs, bRad); ctx.fill();
     }
     if (bw > 0) {
       ctx.strokeStyle = state.qrBorder.color; ctx.lineWidth = bw;
-      ctx.beginPath(); ctx.roundRect(bx, by, qSize, qSize, bRad); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(bx, by, qs, qs, bRad); ctx.stroke();
     }
     const pad = state.qrBorder.padding * S;
-    const inner = qSize - pad*2;
-    imgPromises.push(new Promise(resolve => {
-      const im = new Image();
-      im.crossOrigin = 'anonymous';
-      im.onload = () => { ctx.drawImage(im, bx+pad, by+pad, inner, inner); resolve(); };
-      im.onerror = () => resolve();
-      im.src = qrImgEl.src || qrImgEl.toDataURL?.() || '';
-    }));
-    if (state.qrIconSrc && state.el.qrIcon.visible) {
-      imgPromises.push(new Promise(resolve => {
-        const ic = new Image();
-        ic.crossOrigin = 'anonymous';
-        ic.onload = () => {
-          const iSize = state.el.qrIcon.size * S;
-          const ix = cx - iSize/2, iy = cy - iSize/2;
-          if (iconBg) {
-            const bgPad = 4 * S;
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath(); ctx.roundRect(ix-bgPad, iy-bgPad, iSize+bgPad*2, iSize+bgPad*2, 6*S); ctx.fill();
-          }
-          ctx.drawImage(ic, ix, iy, iSize, iSize);
-          resolve();
-        };
-        ic.onerror = () => resolve();
-        ic.src = state.qrIconSrc;
-      }));
+    const inner = qs - pad*2;
+    ctx.drawImage(A.qrImg, bx + pad, by + pad, inner, inner);
+    if (A.qrIconImg && state.el.qrIcon.visible) {
+      const is = state.el.qrIcon.size * S;
+      const ix = cx - is/2, iy = cy - is/2;
+      if (iconBg) {
+        const bp = 4 * S;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath(); ctx.roundRect(ix - bp, iy - bp, is + bp*2, is + bp*2, 6*S); ctx.fill();
+      }
+      ctx.drawImage(A.qrIconImg, ix, iy, is, is);
     }
   }
 
+  /* === Bloco Marca === */
   if (state.el.brand.visible) {
     const b = state.el.brand;
-    const cx = (b.x/100) * size, cy = (b.y/100) * size;
-    const showLogoBig = b.showLogo && state.companyLogoSrc;
+    const cx = (b.x/100) * w, cy = (b.y/100) * h;
+    const showLogo = b.showLogo && A.companyLogoImg;
     const showText = b.showText;
-    const logoSize = state.el.companyLogo.size * S;
+    const logoSz = state.el.companyLogo.size * S;
     const mode = b.badgeMode || 'letter';
-    const badgeSize = state.el.brandBadge.visible ? state.el.brandBadge.size * S : 0;
+    const badgeSz = state.el.brandBadge.visible ? state.el.brandBadge.size * S : 0;
 
-    const drawTextBlock = (centerY) => {
-      const nameSize = state.el.companyName.size * S;
+    const drawTextBlock = centerY => {
+      const nameSz = state.el.companyName.size * S;
       if (state.el.subCompany.visible) {
         ctx.font = state.el.subCompany.weight + ' ' + (state.el.subCompany.size * S) + 'px Inter, Arial, sans-serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = state.textColor;
-        ctx.fillText((state.subCompany || '').toUpperCase(), cx, centerY - 1.4 * nameSize);
-      }
-      ctx.font = state.el.companyName.weight + ' ' + nameSize + 'px Inter, Arial, sans-serif';
-      const nameW = ctx.measureText(state.companyName || '').width;
-      let iconW = 0, gapIcon = 0, useLogoIcon = false;
-      if (badgeSize > 0) {
-        if (mode === 'letter') { iconW = badgeSize; gapIcon = 4 * S; }
-        else if (mode === 'logo' && state.companyLogoSrc) { iconW = badgeSize * 2.5; gapIcon = 6 * S; useLogoIcon = true; }
-      }
-      const totalW = iconW + gapIcon + nameW;
-      let xStart = cx - totalW/2;
-      if (badgeSize > 0 && mode === 'letter') {
-        const bx = xStart, by = centerY - badgeSize/2;
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath(); ctx.arc(bx + badgeSize/2, by + badgeSize/2, badgeSize/2, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = state.bgColor;
-        ctx.font = '900 ' + (badgeSize * 0.6) + 'px Inter, Arial, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('a', bx + badgeSize/2, by + badgeSize/2 + badgeSize * 0.03);
-        xStart = bx + badgeSize + gapIcon;
-      } else if (badgeSize > 0 && useLogoIcon) {
-        imgPromises.push(new Promise(resolve => {
-          const ic = new Image(); ic.crossOrigin = 'anonymous';
-          ic.onload = () => {
-            const ratio = ic.width / ic.height;
-            let h = badgeSize, w = h * ratio;
-            if (w > badgeSize * 3) { w = badgeSize * 3; h = w / ratio; }
-            const realTotalW = w + gapIcon + nameW;
-            const realXStart = cx - realTotalW/2;
-            ctx.drawImage(ic, realXStart, centerY - h/2, w, h);
-            if (state.el.companyName.visible) {
-              ctx.fillStyle = state.textColor;
-              ctx.font = state.el.companyName.weight + ' ' + nameSize + 'px Inter, Arial, sans-serif';
-              ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-              ctx.fillText(state.companyName || '', realXStart + w + gapIcon, centerY);
-            }
-            resolve();
-          };
-          ic.onerror = () => resolve();
-          ic.src = state.companyLogoSrc;
-        }));
+        ctx.fillStyle = state.textColor;
+        ctx.fillText((state.subCompany || '').toUpperCase(), cx, centerY - 1.4 * nameSz);
+      }
+      ctx.font = state.el.companyName.weight + ' ' + nameSz + 'px Inter, Arial, sans-serif';
+      const nameW = ctx.measureText(state.companyName || '').width;
+      let iW = 0, gI = 0, useLogo = false;
+      if (badgeSz > 0) {
+        if (mode === 'letter') { iW = badgeSz; gI = 4 * S; }
+        else if (mode === 'logo' && A.companyLogoImg) { iW = badgeSz * 2.5; gI = 6 * S; useLogo = true; }
+      }
+      const totW = iW + gI + nameW;
+      let xStart = cx - totW/2;
+      if (badgeSz > 0 && mode === 'letter') {
+        const bx = xStart, by = centerY - badgeSz/2;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath(); ctx.arc(bx + badgeSz/2, by + badgeSz/2, badgeSz/2, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = state.bgColor;
+        ctx.font = '900 ' + (badgeSz * 0.6) + 'px Inter, Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('a', bx + badgeSz/2, by + badgeSz/2 + badgeSz * 0.03);
+        xStart = bx + badgeSz + gI;
+      } else if (badgeSz > 0 && useLogo) {
+        const ratio = A.companyLogoImg.width / A.companyLogoImg.height;
+        let ih = badgeSz, iw = ih * ratio;
+        if (iw > badgeSz * 3) { iw = badgeSz * 3; ih = iw / ratio; }
+        const realTotW = iw + gI + nameW;
+        const realX = cx - realTotW/2;
+        ctx.drawImage(A.companyLogoImg, realX, centerY - ih/2, iw, ih);
+        if (state.el.companyName.visible) {
+          ctx.fillStyle = state.textColor;
+          ctx.font = state.el.companyName.weight + ' ' + nameSz + 'px Inter, Arial, sans-serif';
+          ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+          ctx.fillText(state.companyName || '', realX + iw + gI, centerY);
+        }
         return;
       }
       if (state.el.companyName.visible) {
         ctx.fillStyle = state.textColor;
-        ctx.font = state.el.companyName.weight + ' ' + nameSize + 'px Inter, Arial, sans-serif';
+        ctx.font = state.el.companyName.weight + ' ' + nameSz + 'px Inter, Arial, sans-serif';
         ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
         ctx.fillText(state.companyName || '', xStart, centerY);
       }
     };
 
-    if (showLogoBig && showText) {
-      imgPromises.push(new Promise(resolve => {
-        const ic = new Image(); ic.crossOrigin = 'anonymous';
-        ic.onload = () => {
-          const ratio = ic.width / ic.height;
-          const w = logoSize * ratio, h = logoSize;
-          ctx.drawImage(ic, cx - w/2, cy - h/2 - 20*S, w, h);
-          resolve();
-        };
-        ic.onerror = () => resolve();
-        ic.src = state.companyLogoSrc;
-      }));
-      drawTextBlock(cy + logoSize/2 + 10*S);
-    } else if (showLogoBig) {
-      imgPromises.push(new Promise(resolve => {
-        const ic = new Image(); ic.crossOrigin = 'anonymous';
-        ic.onload = () => {
-          const ratio = ic.width / ic.height;
-          const w = logoSize * ratio, h = logoSize;
-          ctx.drawImage(ic, cx - w/2, cy - h/2, w, h);
-          resolve();
-        };
-        ic.onerror = () => resolve();
-        ic.src = state.companyLogoSrc;
-      }));
-    } else if (showText) drawTextBlock(cy);
+    if (showLogo && showText) {
+      const ratio = A.companyLogoImg.width / A.companyLogoImg.height;
+      const lw2 = logoSz * ratio, lh2 = logoSz;
+      ctx.drawImage(A.companyLogoImg, cx - lw2/2, cy - lh2/2 - 20*S, lw2, lh2);
+      drawTextBlock(cy + logoSz/2 + 10*S);
+    } else if (showLogo) {
+      const ratio = A.companyLogoImg.width / A.companyLogoImg.height;
+      const lw2 = logoSz * ratio, lh2 = logoSz;
+      ctx.drawImage(A.companyLogoImg, cx - lw2/2, cy - lh2/2, lw2, lh2);
+    } else if (showText) {
+      drawTextBlock(cy);
+    }
   }
 
+  /* === Subtítulo === */
   if (state.el.subtitle.visible) {
     const s = state.el.subtitle;
-    const cx = (s.x/100) * size, cy = (s.y/100) * size;
     ctx.font = s.weight + ' ' + (s.size * S) + 'px Inter, Arial, sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = state.textColor;
-    ctx.fillText(state.subtitle || '', cx, cy);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = state.textColor;
+    ctx.fillText(state.subtitle || '', (s.x/100) * w, (s.y/100) * h);
   }
 
-  return Promise.all(imgPromises).then(() => { ctx.restore(); return canvas; });
+  ctx.restore();
 }
 
+async function loadAssets(){
+  const qrSrc = getQrImageSrc();
+  return {
+    qrImg: qrSrc ? await loadImage(qrSrc) : null,
+    qrIconImg: state.qrIconSrc ? await loadImage(state.qrIconSrc) : null,
+    companyLogoImg: state.companyLogoSrc ? await loadImage(state.companyLogoSrc) : null
+  };
+}
+
+/* =========================================================
+   EXPORTAR PNG DE UMA ETIQUETA
+========================================================= */
+async function buildPNGCanvas(){
+  const size = 1000;
+  const canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const A = await loadAssets();
+  drawLabelOnCanvas(ctx, 0, 0, size, size, A);
+  return canvas;
+}
 function previewPNG(){
-  const modal = document.getElementById('pngModal');
-  const img = document.getElementById('pngPreviewImg');
-  buildPNGCanvas().then(canvas => { img.src = canvas.toDataURL('image/png'); modal.classList.add('active'); });
+  const modal = document.getElementById('pngModal'), img = document.getElementById('pngPreviewImg');
+  const useA4 = false; /* preview single por padrão */
+  buildPNGCanvas().then(canvas => {
+    img.src = canvas.toDataURL('image/png');
+    img.classList.toggle('transparent-preview', state.backgroundType === 'transparent');
+    document.getElementById('btnDownloadFromModal').onclick = downloadSinglePNG;
+    modal.classList.add('active');
+  });
 }
 function closePngModal(e){
   if (e && e.target !== document.getElementById('pngModal') && e.type === 'click') return;
@@ -1675,6 +1313,100 @@ function downloadSinglePNG(){
     link.click();
   });
 }
+
+/* =========================================================
+   EXPORTAR PNG DA FOLHA A4 COMPLETA (300 DPI)
+========================================================= */
+async function buildA4PNGCanvas(){
+  const DPI = 300;
+  const MM = DPI / 25.4;               /* px por mm */
+  const canvasW = Math.round(210 * MM);
+  const canvasH = Math.round(297 * MM);
+  const canvas = document.createElement('canvas');
+  canvas.width = canvasW; canvas.height = canvasH;
+  const ctx = canvas.getContext('2d');
+
+  /* Fundo do A4: branco por padrão, transparente no modo "Sem Fundo" */
+  if (state.backgroundType !== 'transparent') {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvasW, canvasH);
+  }
+
+  const lay = calculateA4Layout();
+  const A = await loadAssets();
+
+  const padPx = lay.padMm * MM;
+  const wPx = lay.labelW * MM;
+  const hPx = lay.labelH * MM;
+  const gxPx = lay.gapX * MM;
+  const gyPx = lay.gapY * MM;
+
+  for (let r = 0; r < lay.rows; r++) {
+    for (let c = 0; c < lay.cols; c++) {
+      let x, y;
+      if (state.distribution === 'stretch') {
+        if (lay.cols > 1) x = padPx + c * (wPx + gxPx);
+        else x = (canvasW - wPx) / 2;
+        if (lay.rows > 1) y = padPx + r * (hPx + gyPx);
+        else y = (canvasH - hPx) / 2;
+      } else {
+        const totW = lay.cols * wPx + (lay.cols - 1) * gxPx;
+        const totH = lay.rows * hPx + (lay.rows - 1) * gyPx;
+        const offX = (canvasW - totW) / 2;
+        const offY = (canvasH - totH) / 2;
+        x = offX + c * (wPx + gxPx);
+        y = offY + r * (hPx + gyPx);
+      }
+      drawLabelOnCanvas(ctx, x, y, wPx, hPx, A);
+    }
+  }
+
+  return canvas;
+}
+function downloadA4PNG(){
+  toast('Gerando A4 PNG 300 DPI...');
+  buildA4PNGCanvas().then(canvas => {
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = 'i-tiqueta-folha-A4-' + (state.backgroundType === 'transparent' ? 'transparente' : 'colorida') + '.png';
+      link.href = url;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast('A4 PNG baixado (300 DPI)', 'success');
+    }, 'image/png');
+  }).catch(err => {
+    console.error(err);
+    toast('Erro ao gerar PNG', 'error');
+  });
+}
+
+/* =========================================================
+   LIMPAR ESTILOS INLINE ANTES DE IMPRIMIR (evita 2ª página)
+========================================================= */
+window.addEventListener('beforeprint', () => {
+  const vp = document.getElementById('a4Viewport');
+  const sc = document.getElementById('a4Scaler');
+  const pg = document.getElementById('a4Page');
+  if (vp) { vp._h = vp.style.height; vp.style.height = ''; }
+  if (sc) { sc._w = sc.style.width; sc._h = sc.style.height; sc._t = sc.style.transform; sc.style.width = ''; sc.style.height = ''; sc.style.transform = ''; }
+  if (pg) { pg._p = pg.style.padding; pg.style.padding = '6mm'; }
+  document.body.classList.toggle('transparent-print', state.backgroundType === 'transparent');
+});
+window.addEventListener('afterprint', () => {
+  const vp = document.getElementById('a4Viewport');
+  const sc = document.getElementById('a4Scaler');
+  const pg = document.getElementById('a4Page');
+  if (vp && vp._h !== undefined) vp.style.height = vp._h;
+  if (sc) {
+    if (sc._w !== undefined) sc.style.width = sc._w;
+    if (sc._h !== undefined) sc.style.height = sc._h;
+    if (sc._t !== undefined) sc.style.transform = sc._t;
+  }
+  if (pg && pg._p !== undefined) pg.style.padding = pg._p;
+  fitA4Sheet();
+});
+
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePngModal(); });
 </script>
 </body>
