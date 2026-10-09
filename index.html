@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Gerador de Etiquetas I-Tiqueta - Editor Completo A4</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;-webkit-text-size-adjust:100%;-webkit-text-tap-highlight-color:transparent}
+
+/* ============ ETIQUETA ============ */
+.itq-label{
+  --u:1;
+  position:relative;
+  overflow:hidden;
+  background:#f97316;
+  box-shadow:0 8px 25px -5px rgba(0,0,0,.5);
+  transition:background-color .15s, border-radius .15s;
+  margin:0 auto;
+}
+.itq-el{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  line-height:1;
+  user-select:none;-webkit-user-select:none;touch-action:none;z-index:5;
+}
+.itq-el.draggable{cursor:grab}
+.itq-el.draggable:active{cursor:grabbing}
+.itq-el.draggable::before{content:'';position:absolute;inset:-6px;border:1.5px dashed rgba(99,102,241,0);border-radius:6px;pointer-events:none;transition:border-color .15s}
+.itq-el.draggable:hover::before{border-color:rgba(99,102,241,.55)}
+.itq-el.dragging::before{border-color:rgba(99,102,241,1);border-style:solid}
+.itq-el.hidden-el{display:none !important}
+
+.itq-title{display:flex;align-items:center;justify-content:center;font-weight:800;white-space:nowrap;letter-spacing:-.02em}
+.label-title-e,.label-title-text{font-weight:inherit;line-height:1}
+
+.qr-box-container{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;border:2px solid #e2e8f0;box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+.qr-canvas{display:flex;align-items:center;justify-content:center;line-height:0;width:100%;height:100%}
+.qr-canvas img,.qr-canvas canvas{display:block;width:100%;height:100%}
+
+/* Ícone: SEMPRE classe (não id) para sobreviver ao clone */
+.qr-center-icon{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  object-fit:contain;
+  background:transparent !important;
+  padding:0 !important;border-radius:0 !important;box-shadow:none !important;
+  z-index:2;
+}
+.qr-center-icon.has-white-bg{
+  background:#fff !important;padding:3px !important;border-radius:6px !important;
+  box-shadow:0 1px 3px rgba(0,0,0,.15) !important;
+}
+.qr-center-icon.hidden{display:none}
+
+.brand-el{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(2px*var(--u))}
+.brand-text-group{display:flex;flex-direction:column;align-items:center;gap:calc(2px*var(--u))}
+.brand-text-group.hidden{display:none}
+.brand-row{display:flex;align-items:center;gap:calc(4px*var(--u))}
+.brand-badge{display:flex;align-items:center;justify-content:center;background:#fff;color:#f97316;font-weight:900;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.15);flex-shrink:0}
+.brand-inline-logo{display:none;object-fit:contain;flex-shrink:0;background:transparent}
+.brand-inline-logo.active{display:block}
+.company-custom-logo{display:none;object-fit:contain;background:transparent}
+.company-custom-logo.active{display:block}
+.label-subcompany{color:#000;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.label-company-name{color:#000;font-weight:800}
+.label-subtitle{color:#000;font-weight:600;white-space:nowrap}
+.label-subcompany.hidden,.label-company-name.hidden,.label-subtitle.hidden{display:none}
+
+.itq-label.mirrored{transform:scaleX(-1)}
+.itq-el.draggable.locked{cursor:default}
+.itq-el.draggable.locked::before{display:none}
+
+/* ============ GUIAS ============ */
+.guide-layer{position:absolute;inset:0;pointer-events:none;z-index:100;overflow:hidden}
+.guide{position:absolute;pointer-events:none;display:none}
+.guide-v{top:0;bottom:0;width:1px;background:#ec4899;box-shadow:0 0 6px rgba(236,72,153,.7)}
+.guide-h{left:0;right:0;height:1px;background:#ec4899;box-shadow:0 0 6px rgba(236,72,153,.7)}
+.guide-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:#ec4899;transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(236,72,153,.9);display:none;z-index:101}
+
+/* ============ FOLHA A4 ============ */
+.a4-page{
+  width:210mm;height:297mm;min-height:297mm;background:#fff;
+  box-shadow:0 10px 25px -5px rgba(0,0,0,.5);position:relative;overflow:hidden;color:#000;
+  display:flex;flex-wrap:wrap;align-content:space-between;justify-content:space-between;
+  padding:6mm;
+}
+.a4-item{display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.a4-item .itq-el{cursor:default;pointer-events:none}
+.a4-item .itq-el::before{display:none}
+.a4-item .guide-layer{display:none !important}
+#a4Viewport{overflow:hidden}
+#a4Scaler{transform-origin:top center;will-change:transform}
+
+/* ============ SIDEBAR ============ */
+.ft-section{background:rgba(15,23,42,.6);border:1px solid rgba(51,65,85,.6);border-radius:12px;overflow:hidden}
+.ft-section > summary{list-style:none;cursor:pointer;padding:12px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fb923c;display:flex;align-items:center;gap:8px;user-select:none}
+.ft-section > summary::-webkit-details-marker{display:none}
+.ft-section > summary::after{content:'\f078';font-family:'Font Awesome 6 Free';font-weight:900;margin-left:auto;font-size:9px;color:#64748b;transition:transform .2s}
+.ft-section[open] > summary::after{transform:rotate(180deg)}
+.ft-section > div{padding:0 14px 14px 14px}
+.ft-row{display:grid;grid-template-columns:70px 1fr 42px;gap:8px;align-items:center;margin-bottom:8px}
+.ft-row label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.04em}
+.ft-row input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:#334155;outline:none;cursor:pointer}
+.ft-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#f97316;cursor:pointer;box-shadow:0 0 0 3px rgba(249,115,22,.2)}
+.ft-row input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#f97316;cursor:pointer;border:none}
+.ft-row .ft-val{font-size:10px;color:#f97316;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.ft-toggle{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:rgba(30,41,59,.7);border-radius:8px;font-size:11px;color:#cbd5e1;margin-bottom:8px}
+.ft-toggle input[type=checkbox]{-webkit-appearance:none;appearance:none;width:34px;height:20px;border-radius:10px;background:#475569;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.ft-toggle input[type=checkbox]::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}
+.ft-toggle input[type=checkbox]:checked{background:#f97316}
+.ft-toggle input[type=checkbox]:checked::after{transform:translateX(14px)}
+.ft-note{font-size:10px;color:#94a3b8;padding:8px 10px;background:rgba(30,41,59,.6);border-radius:8px;border:1px dashed rgba(71,85,105,.6);line-height:1.4}
+.ft-note strong{color:#f97316}
+
+.gallery-empty{font-size:11px;color:#64748b;text-align:center;padding:14px 8px;background:rgba(30,41,59,.4);border-radius:8px;border:1px dashed rgba(71,85,105,.5)}
+.icons-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.icon-card{position:relative;aspect-ratio:1;border-radius:8px;padding:4px;cursor:pointer;border:2px solid transparent;transition:border-color .15s,transform .1s;overflow:hidden;background-image:linear-gradient(45deg,#cbd5e1 25%,transparent 25%),linear-gradient(-45deg,#cbd5e1 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#cbd5e1 75%),linear-gradient(-45deg,transparent 75%,#cbd5e1 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0px;background-color:#e2e8f0}
+.icon-card:hover{border-color:#f97316}
+.icon-card:active{transform:scale(.96)}
+.icon-card img{width:100%;height:100%;object-fit:contain;display:block}
+.icon-card .icon-del{position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(239,68,68,.9);color:white;border-radius:50%;font-size:10px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:2;border:none;line-height:1}
+.icon-card:hover .icon-del{display:flex}
+.templates-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tpl-card{position:relative;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid rgba(71,85,105,.6);transition:border-color .15s,transform .1s;background:rgba(30,41,59,.6)}
+.tpl-card:hover{border-color:#f97316}
+.tpl-card:active{transform:scale(.98)}
+.tpl-thumb{aspect-ratio:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.tpl-thumb-transparent{background-image:linear-gradient(45deg,#cbd5e1 25%,transparent 25%),linear-gradient(-45deg,#cbd5e1 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#cbd5e1 75%),linear-gradient(-45deg,transparent 75%,#cbd5e1 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0px;background-color:#e2e8f0}
+.tpl-thumb-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8%}
+.tpl-thumb-title{font-weight:800;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tpl-thumb-qr{width:38%;aspect-ratio:1;background:#fff;border-radius:12%;box-shadow:0 1px 3px rgba(0,0,0,.15);position:relative;display:flex;align-items:center;justify-content:center}
+.tpl-thumb-qr::after{content:'';position:absolute;inset:15%;background:repeating-conic-gradient(#000 0 25%,#fff 0 50%) 50%/8px 8px;border-radius:4%}
+.tpl-thumb-brand{font-weight:800;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tpl-name{font-size:10px;color:#cbd5e1;padding:4px 6px;background:rgba(15,23,42,.8);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpl-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(239,68,68,.95);color:white;border-radius:50%;font-size:11px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:3;border:none;line-height:1}
+.tpl-card:hover .tpl-del{display:flex}
+.btn-sm{font-size:11px;font-weight:600;padding:8px 12px;border-radius:8px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;border:none}
+.btn-primary{background:#f97316;color:#fff}
+.btn-primary:hover{background:#ea580c}
+.btn-primary:active{transform:scale(.97)}
+.btn-ghost{background:rgba(51,65,85,.7);color:#cbd5e1}
+.btn-ghost:hover{background:rgba(71,85,105,.8)}
+.btn-danger{background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.4)}
+.btn-indigo{background:rgba(99,102,241,.2);color:#a5b4fc;border:1px solid rgba(99,102,241,.4)}
+
+.mobile-bar{padding-bottom:calc(.75rem + env(safe-area-inset-bottom,0px))}
+@media (max-width:1023px){body{padding-bottom:calc(6.5rem + env(safe-area-inset-bottom,0px))}}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:#1e293b}
+::-webkit-scrollbar-thumb{background:#475569;border-radius:4px}
+#pngModal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+#pngModal.active{display:flex}
+#pngModal img{max-width:min(90vw,600px);max-height:80vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8)}
+#toast{position:fixed;bottom:130px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#f8fafc;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 10px 25px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:200;border:1px solid rgba(71,85,105,.6);display:flex;align-items:center;gap:8px;max-width:90vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.success{border-color:rgba(34,197,94,.5)}
+#toast.success i{color:#4ade80}
+#toast.error{border-color:rgba(239,68,68,.5)}
+#toast.error i{color:#f87171}
+
+@media print{
+  html,body{background:#fff !important;color:#000 !important;padding:0 !important;margin:0 !important;width:auto !important;height:auto !important;overflow:visible !important}
+  .no-print{display:none !important}
+  main{display:block !important;height:auto !important;overflow:visible !important;background:#fff !important}
+  #workspace{display:block !important;padding:0 !important;margin:0 !important;min-height:0 !important}
+  #viewSingle{display:none !important}
+  #viewA4{display:block !important;padding:0 !important;margin:0 !important}
+  #a4Viewport{display:block !important;overflow:visible !important;height:auto !important;width:auto !important}
+  #a4Scaler{transform:none !important;width:auto !important;height:auto !important}
+  .a4-page{box-shadow:none !important;margin:0 !important;width:210mm !important;height:297mm !important}
+  @page{size:A4 portrait;margin:0}
+}
+</style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row antialiased bg-slate-900 text-slate-100">
+
+<aside class="no-print order-last lg:order-first w-full lg:w-[420px] bg-slate-800 border-t lg:border-t-0 lg:border-r border-slate-700 flex flex-col h-auto lg:h-screen z-20 shrink-0">
+
+  <div class="hidden lg:flex p-5 border-b border-slate-700 items-center justify-between bg-slate-800/80 backdrop-blur">
+    <div class="flex items-center gap-3">
+      <div class="p-2 bg-orange-500 rounded-lg text-white font-bold"><i class="fa-solid fa-car-battery text-xl"></i></div>
+      <div>
+        <h1 class="font-bold text-lg text-white leading-tight">I-Tiqueta AutoBox</h1>
+        <p class="text-xs text-slate-400">Editor Completo</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <span id="saveStatus" class="text-[10px] font-medium text-slate-500"></span>
+      <span class="text-xs font-semibold px-2.5 py-1 bg-orange-500/20 text-orange-400 rounded-full border border-orange-500/30">v5.0</span>
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
+
+    <div class="flex gap-2">
+      <button onclick="saveAsTemplate()" class="btn-sm btn-primary flex-1"><i class="fa-solid fa-floppy-disk"></i> Salvar como modelo</button>
+      <button onclick="resetAllState()" class="btn-sm btn-danger" title="Resetar tudo"><i class="fa-solid fa-rotate-left"></i></button>
+    </div>
+
+    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/60 space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-orange-400 flex items-center gap-2"><i class="fa-solid fa-sliders"></i> Modo de Impressão</h2>
+      <div class="grid grid-cols-2 gap-2">
+        <button id="btnNormalMode" onclick="setMirrorMode(false)" class="p-2.5 rounded-lg border text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-500/20"><i class="fa-solid fa-eye"></i> Normal</button>
+        <button id="btnMirrorMode" onclick="setMirrorMode(true)" class="p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all"><i class="fa-solid fa-right-left"></i> Espelhado</button>
+      </div>
+      <div class="ft-toggle"><span><i class="fa-solid fa-hand-pointer text-orange-400 mr-1"></i> Modo Arrastar</span><input type="checkbox" id="toggleDrag" checked></div>
+      <div class="ft-toggle"><span><i class="fa-solid fa-magnet text-pink-400 mr-1"></i> Guias de alinhamento</span><input type="checkbox" id="toggleGuides" checked></div>
+    </div>
+
+    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/60 space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-orange-400 flex items-center gap-2"><i class="fa-solid fa-font"></i> Textos da Etiqueta</h2>
+      <div><label class="text-xs text-slate-300 block mb-1">Título Superior</label><input type="text" id="inputTitle" value="I-Tiqueta" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500"></div>
+      <div><label class="text-xs text-slate-300 block mb-1">Texto Inferior / Instrução</label><input type="text" id="inputSubtitle" value="Verifique sua troca de óleo" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500"></div>
+      <div><label class="text-xs text-slate-300 block mb-1">Texto Adicional da Empresa</label><input type="text" id="inputSubCompany" value="Centro Automotivo" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500"></div>
+      <div><label class="text-xs text-slate-300 block mb-1">Nome Principal da Marca</label><input type="text" id="inputCompanyName" value="autobox" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500"></div>
+    </div>
+
+    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/60 space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-orange-400 flex items-center gap-2"><i class="fa-solid fa-palette"></i> Cores e Formato</h2>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs text-slate-300 block mb-1">Formato</label>
+          <select id="selectShape" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500">
+            <option value="rounded">Arredondada</option>
+            <option value="circle">Circular (oval)</option>
+            <option value="square">Quadrada</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-slate-300 block mb-1">Fundo</label>
+          <select id="selectBackgroundType" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500">
+            <option value="color">Com Cor</option>
+            <option value="transparent">Sem Fundo (transparente)</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 pt-2">
+        <div><label class="text-xs text-slate-400 block mb-1 text-center">Fundo</label><input type="color" id="colorBg" value="#f97316" class="w-full h-10 bg-slate-800 border border-slate-700 rounded cursor-pointer p-1"></div>
+        <div><label class="text-xs text-slate-400 block mb-1 text-center">Texto</label><input type="color" id="colorText" value="#000000" class="w-full h-10 bg-slate-800 border border-slate-700 rounded cursor-pointer p-1"></div>
+        <div><label class="text-xs text-slate-400 block mb-1 text-center">Letra "I"</label><input type="color" id="colorE" value="#2563eb" class="w-full h-10 bg-slate-800 border border-slate-700 rounded cursor-pointer p-1"></div>
+      </div>
+    </div>
+
+    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/60 space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-orange-400 flex items-center gap-2"><i class="fa-solid fa-qrcode"></i> QR Code &amp; Ícone</h2>
+      <div><label class="text-xs text-slate-300 block mb-1">Link ou Dados do QR Code</label><input type="text" id="inputQrData" value="https://autobox.com.br/troca-de-oleo" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500"></div>
+      <div>
+        <label class="text-xs text-slate-300 block mb-1">Ícone no Centro do QR</label>
+        <div class="flex items-center gap-2">
+          <input type="file" id="uploadQrIcon" accept="image/*" class="hidden">
+          <button onclick="document.getElementById('uploadQrIcon').click()" class="flex-1 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all"><i class="fa-solid fa-upload"></i> Carregar Ícone</button>
+          <button onclick="removeQrIcon()" class="bg-red-500/20 text-red-400 border border-red-500/30 p-2.5 rounded-lg hover:bg-red-500/30 text-xs"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+      <button onclick="stripWhiteFromIcon()" class="btn-sm btn-indigo w-full"><i class="fa-solid fa-eraser"></i> Remover fundo branco do PNG</button>
+      <div class="ft-toggle"><span><i class="fa-solid fa-square text-orange-400 mr-1"></i> Fundo branco atrás do ícone</span><input type="checkbox" id="toggleIconBg"></div>
+    </div>
+
+    <details class="ft-section" open>
+      <summary><i class="fa-solid fa-images"></i> Galeria de Ícones</summary>
+      <div>
+        <div id="iconsGallery" class="icons-grid mb-3"></div>
+        <button onclick="saveCurrentQrIcon()" class="btn-sm btn-primary w-full"><i class="fa-solid fa-plus"></i> Salvar ícone atual</button>
+      </div>
+    </details>
+
+    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/60 space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-orange-400 flex items-center gap-2"><i class="fa-solid fa-building"></i> Logo / Marca da Empresa</h2>
+      <div class="ft-toggle"><span><i class="fa-solid fa-image text-orange-400 mr-1"></i> Mostrar logo grande</span><input type="checkbox" data-el="brand" data-prop="showLogo" checked></div>
+      <div class="ft-toggle"><span><i class="fa-solid fa-font text-orange-400 mr-1"></i> Mostrar textos</span><input type="checkbox" data-el="brand" data-prop="showText" checked></div>
+      <div>
+        <label class="text-xs text-slate-300 block mb-1">Ícone antes do nome</label>
+        <select id="selectBadgeMode" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500">
+          <option value="letter">Letra "a" em círculo</option>
+          <option value="logo">Logo da empresa</option>
+          <option value="none">Nenhum</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-2">
+        <input type="file" id="uploadCompanyLogo" accept="image/*" class="hidden">
+        <button onclick="document.getElementById('uploadCompanyLogo').click()" class="flex-1 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all"><i class="fa-solid fa-upload"></i> Enviar Logo</button>
+        <button onclick="removeCompanyLogo()" class="bg-red-500/20 text-red-400 border border-red-500/30 p-2.5 rounded-lg hover:bg-red-500/30 text-xs"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      <button onclick="saveCompanyLogoToGallery()" class="btn-sm btn-ghost w-full"><i class="fa-solid fa-plus"></i> Adicionar logo à galeria</button>
+    </div>
+
+    <details class="ft-section" open>
+      <summary><i class="fa-solid fa-ruler-combined"></i> Dimensões &amp; Grade A4 (mm)</summary>
+      <div>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="text-xs text-slate-300 block mb-1">Largura (mm)</label>
+            <input type="number" id="inputLabelWidth" value="65" min="15" max="200" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
+          </div>
+          <div>
+            <label class="text-xs text-slate-300 block mb-1">Altura (mm)</label>
+            <input type="number" id="inputLabelHeight" value="65" min="15" max="200" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
+          </div>
+        </div>
+
+        <div class="ft-toggle" style="margin-bottom:10px">
+          <span><i class="fa-solid fa-rotate text-indigo-400 mr-1"></i> Rotacionar etiquetas 90°</span>
+          <input type="checkbox" id="toggleRotation">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="text-xs text-slate-300 block mb-1">Colunas (0=auto)</label>
+            <input type="number" id="inputForcedCols" value="0" min="0" max="20" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
+          </div>
+          <div>
+            <label class="text-xs text-slate-300 block mb-1">Linhas (0=auto)</label>
+            <input type="number" id="inputForcedRows" value="0" min="0" max="30" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="text-xs text-slate-300 block mb-1">Margem (mm)</label>
+            <input type="number" id="inputPageMargin" value="6" min="0" max="20" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
+          </div>
+          <div>
+            <label class="text-xs text-slate-300 block mb-1">Gap mín (mm)</label>
+            <input type="number" id="inputLabelGap" value="3" min="0" max="20" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs text-slate-300 block mb-1">Distribuição na folha</label>
+          <select id="selectDistribution" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-orange-500">
+            <option value="stretch">Esticar até bordas (máx. aproveitamento)</option>
+            <option value="center">Centralizar bloco</option>
+          </select>
+        </div>
+
+        <div class="text-xs text-slate-400 bg-slate-800/80 p-2.5 rounded-lg border border-slate-700/50 space-y-1 mt-3">
+          <div class="flex justify-between"><span>Grade:</span><span id="lblCalculatedCount" class="font-bold text-orange-400 text-sm">12 un.</span></div>
+          <div class="flex justify-between text-[11px]"><span>Tam. etiqueta efetiva:</span><span id="lblEffectiveSize" class="text-slate-300 font-medium">65×65 mm</span></div>
+          <div class="flex justify-between text-[11px]"><span>Ocupação folha:</span><span id="lblFillPercent" class="text-slate-300 font-medium">—</span></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="ft-section">
+      <summary><i class="fa-solid fa-heading"></i> Ajustes Finos — Título</summary>
+      <div>
+        <div class="ft-toggle"><span>Visível</span><input type="checkbox" data-el="title" data-prop="visible" checked></div>
+        <div class="ft-row"><label>Posição X</label><input type="range" min="0" max="100" step="0.5" value="50" data-el="title" data-prop="x" data-suffix="%"><span class="ft-val">50%</span></div>
+        <div class="ft-row"><label>Posição Y</label><input type="range" min="0" max="100" step="0.5" value="13" data-el="title" data-prop="y" data-suffix="%"><span class="ft-val">13%</span></div>
+        <div class="ft-row"><label>Tamanho</label><input type="range" min="8" max="48" step="0.5" value="24" data-el="title" data-prop="size" data-suffix="px"><span class="ft-val">24</span></div>
+        <div class="ft-row"><label>Peso</label><input type="range" min="300" max="900" step="100" value="800" data-el="title" data-prop="weight"><span class="ft-val">800</span></div>
+      </div>
+    </details>
+
+    <details class="ft-section">
+      <summary><i class="fa-solid fa-qrcode"></i> Ajustes Finos — QR</summary>
+      <div>
+        <div class="ft-toggle"><span>Visível</span><input type="checkbox" data-el="qr" data-prop="visible" checked></div>
+        <div class="ft-row"><label>Posição X</label><input type="range" min="0" max="100" step="0.5" value="50" data-el="qr" data-prop="x" data-suffix="%"><span class="ft-val">50%</span></div>
+        <div class="ft-row"><label>Posição Y</label><input type="range" min="0" max="100" step="0.5" value="50" data-el="qr" data-prop="y" data-suffix="%"><span class="ft-val">50%</span></div>
+        <div class="ft-row"><label>Tamanho</label><input type="range" min="40" max="200" step="1" value="110" data-el="qr" data-prop="size" data-suffix="px"><span class="ft-val">110</span></div>
+        <div class="pt-2 mt-2 border-t border-slate-700/60">
+          <div class="text-[10px] uppercase text-slate-500 font-bold mb-2 tracking-wider">Ícone Central</div>
+          <div class="ft-toggle"><span>Visível</span><input type="checkbox" data-el="qrIcon" data-prop="visible" checked></div>
+          <div class="ft-row"><label>Tamanho</label><input type="range" min="10" max="80" step="1" value="32" data-el="qrIcon" data-prop="size" data-suffix="px"><span class="ft-val">32</span></div>
+        </div>
+        <div class="pt-2 mt-2 border-t border-slate-700/60">
+          <div class="text-[10px] uppercase text-slate-500 font-bold mb-2 tracking-wider">Borda do QR</div>
+          <div class="ft-row"><label>Espessura</label><input type="range" min="0" max="10" step="0.5" value="2" data-el="qrBorder" data-prop="width" data-suffix="px"><span class="ft-val">2</span></div>
+          <div class="ft-row"><label>Raio</label><input type="range" min="0" max="40" step="1" value="16" data-el="qrBorder" data-prop="radius" data-suffix="px"><span class="ft-val">16</span></div>
+          <div class="ft-row"><label>Padding</label><input type="range" min="0" max="30" step="1" value="10" data-el="qrBorder" data-prop="padding" data-suffix="px"><span class="ft-val">10</span></div>
+          <div class="grid grid-cols-2 gap-2 mt-2">
+            <div><label class="text-[10px] text-slate-400 block mb-1 text-center">Cor Borda</label><input type="color" id="qrBorderColor" value="#e2e8f0" class="w-full h-9 bg-slate-800 border border-slate-700 rounded cursor-pointer p-1"></div>
+            <div><label class="text-[10px] text-slate-400 block mb-1 text-center">Fundo QR</label><input type="color" id="qrBgColor" value="#ffffff" class="w-full h-9 bg-slate-800 border border-slate-700 rounded cursor-pointer p-1"></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="ft-section">
+      <summary><i class="fa-solid fa-copyright"></i> Ajustes Finos — Marca</summary>
+      <div>
+        <div class="ft-toggle"><span>Bloco visível</span><input type="checkbox" data-el="brand" data-prop="visible" checked></div>
+        <div class="ft-row"><label>Posição X</label><input type="range" min="0" max="100" step="0.5" value="50" data-el="brand" data-prop="x" data-suffix="%"><span class="ft-val">50%</span></div>
+        <div class="ft-row"><label>Posição Y</label><input type="range" min="0" max="100" step="0.5" value="81" data-el="brand" data-prop="y" data-suffix="%"><span class="ft-val">81%</span></div>
+        <div class="pt-2 mt-2 border-t border-slate-700/60">
+          <div class="ft-toggle"><span>"Centro Automotivo"</span><input type="checkbox" data-el="subCompany" data-prop="visible" checked></div>
+          <div class="ft-row"><label>Tamanho</label><input type="range" min="6" max="20" step="0.5" value="10" data-el="subCompany" data-prop="size" data-suffix="px"><span class="ft-val">10</span></div>
+        </div>
+        <div class="pt-2 mt-2 border-t border-slate-700/60">
+          <div class="ft-toggle"><span>Nome visível</span><input type="checkbox" data-el="companyName" data-prop="visible" checked></div>
+          <div class="ft-row"><label>Tamanho</label><input type="range" min="8" max="32" step="0.5" value="18" data-el="companyName" data-prop="size" data-suffix="px"><span class="ft-val">18</span></div>
+        </div>
+        <div class="pt-2 mt-2 border-t border-slate-700/60">
+          <div class="ft-row"><label>Ícone</label><input type="range" min="10" max="40" step="1" value="20" data-el="brandBadge" data-prop="size" data-suffix="px"><span class="ft-val">20</span></div>
+          <div class="ft-row"><label>Logo grande</label><input type="range" min="20" max="140" step="1" value="40" data-el="companyLogo" data-prop="size" data-suffix="px"><span class="ft-val">40</span></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="ft-section">
+      <summary><i class="fa-solid fa-message"></i> Ajustes Finos — Subtítulo</summary>
+      <div>
+        <div class="ft-toggle"><span>Visível</span><input type="checkbox" data-el="subtitle" data-prop="visible" checked></div>
+        <div class="ft-row"><label>Posição X</label><input type="range" min="0" max="100" step="0.5" value="50" data-el="subtitle" data-prop="x" data-suffix="%"><span class="ft-val">50%</span></div>
+        <div class="ft-row"><label>Posição Y</label><input type="range" min="0" max="100" step="0.5" value="93" data-el="subtitle" data-prop="y" data-suffix="%"><span class="ft-val">93%</span></div>
+        <div class="ft-row"><label>Tamanho</label><input type="range" min="6" max="24" step="0.5" value="12" data-el="subtitle" data-prop="size" data-suffix="px"><span class="ft-val">12</span></div>
+      </div>
+    </details>
+
+    <details class="ft-section">
+      <summary><i class="fa-solid fa-square"></i> Borda da Etiqueta</summary>
+      <div>
+        <div class="ft-row"><label>Espessura</label><input type="range" min="0" max="12" step="0.5" value="0" data-el="labelBorder" data-prop="width" data-suffix="px"><span class="ft-val">0</span></div>
+        <div class="ft-row"><label>Raio</label><input type="range" min="0" max="150" step="1" value="28" data-el="labelBorder" data-prop="radius" data-suffix="px"><span class="ft-val">28</span></div>
+        <div class="ft-row"><label>Estilo</label>
+          <select data-el="labelBorder" data-prop="style" class="col-span-2 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-orange-500">
+            <option value="solid">Sólida</option>
+            <option value="dashed">Tracejada</option>
+            <option value="dotted">Pontilhada</option>
+          </select>
+          <span></span>
+        </div>
+        <div class="grid grid-cols-1 gap-2 mt-2">
+          <div><label class="text-[10px] text-slate-400 block mb-1 text-center">Cor da Borda</label><input type="color" id="labelBorderColor" value="#000000" class="w-full h-9 bg-slate-800 border border-slate-700 rounded cursor-pointer p-1"></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="ft-section" open>
+      <summary><i class="fa-solid fa-folder-open"></i> Modelos Salvos</summary>
+      <div>
+        <div id="templatesGallery" class="templates-grid mb-3"></div>
+        <button onclick="saveAsTemplate()" class="btn-sm btn-primary w-full"><i class="fa-solid fa-plus"></i> Salvar modelo atual</button>
+      </div>
+    </details>
+
+  </div>
+
+  <div class="no-print mobile-bar fixed bottom-0 left-0 right-0 lg:static z-30 border-t border-slate-700 bg-slate-800/95 backdrop-blur-md p-3 lg:p-4 flex flex-row lg:flex-col gap-2">
+    <button onclick="window.print()" class="flex-1 bg-orange-500 hover:bg-orange-600 active:scale-[.98] text-white font-semibold py-3 px-3 rounded-xl shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition-all text-sm"><i class="fa-solid fa-print"></i> <span>Imprimir A4</span></button>
+    <button onclick="previewPNG()" class="flex-1 bg-indigo-500 hover:bg-indigo-600 active:scale-[.98] text-white font-semibold py-3 px-3 rounded-xl shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 text-sm transition-all"><i class="fa-solid fa-image"></i> <span>Ver PNG</span></button>
+    <button onclick="downloadSinglePNG()" class="flex-1 bg-slate-700 hover:bg-slate-600 active:scale-[.98] text-slate-200 font-medium py-3 px-3 rounded-xl flex items-center justify-center gap-2 text-sm transition-all"><i class="fa-solid fa-download"></i> <span class="hidden sm:inline">Baixar PNG HD</span><span class="sm:hidden">Baixar</span></button>
+  </div>
+</aside>
+
+<main class="order-first lg:order-last flex-1 flex flex-col h-auto lg:h-screen lg:overflow-y-auto bg-slate-950">
+
+  <div class="no-print lg:hidden flex items-center gap-3 px-4 py-3 bg-slate-900 border-b border-slate-800">
+    <div class="p-2 bg-orange-500 rounded-lg text-white font-bold"><i class="fa-solid fa-car-battery"></i></div>
+    <div class="min-w-0 flex-1">
+      <h1 class="font-bold text-base text-white leading-tight truncate">I-Tiqueta AutoBox</h1>
+      <p class="text-[11px] text-slate-400">Editor Completo v5</p>
+    </div>
+    <span id="saveStatusMobile" class="text-[10px] font-medium text-slate-500"></span>
+  </div>
+
+  <header class="no-print bg-slate-900 border-b border-slate-800 p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-10">
+    <div class="flex items-center gap-3 w-full sm:w-auto">
+      <div class="flex bg-slate-800 p-1 rounded-lg border border-slate-700 w-full sm:w-auto">
+        <button id="tabBtnPreview" onclick="switchTab('single')" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs font-semibold bg-orange-500 text-white transition-all whitespace-nowrap"><i class="fa-solid fa-vector-square mr-1"></i> Preview</button>
+        <button id="tabBtnA4" onclick="switchTab('a4')" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white transition-all whitespace-nowrap"><i class="fa-solid fa-sheet-plastic mr-1"></i> Folha A4</button>
+      </div>
+      <span id="mirrorBadge" class="hidden text-xs font-medium px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 whitespace-nowrap"><i class="fa-solid fa-right-left mr-1"></i> ESPELHADO</span>
+    </div>
+    <div class="hidden md:flex text-xs text-slate-400 items-center gap-2">
+      <i class="fa-solid fa-magnet text-pink-400"></i>
+      <span>Guias em cruz aparecem ao arrastar.</span>
+    </div>
+  </header>
+
+  <div id="workspace" class="flex-1 p-3 sm:p-6 flex items-start lg:items-center justify-center min-h-[380px] lg:min-h-[600px]">
+
+    <div id="viewSingle" class="flex flex-col items-center justify-center gap-4 sm:gap-6 w-full max-w-md">
+      <div class="text-center space-y-1">
+        <h3 class="text-sm font-semibold text-slate-300">Pré-visualização Interativa</h3>
+        <p class="text-xs text-slate-500">Arraste os elementos • <span id="lblPreviewSize">65×65 mm</span></p>
+      </div>
+
+      <div id="singleLabelWrapper" class="p-4 sm:p-8 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl flex items-center justify-center w-full">
+
+        <div id="liveLabel" class="itq-label">
+          <div class="guide-layer" id="guideLayer"></div>
+
+          <div class="itq-el itq-title draggable el-title" id="elTitle" data-el-key="title">
+            <span class="label-title-e" id="labelTitleE" style="color:#2563eb">I-</span><span class="label-title-text" id="labelTitleText" style="color:#000">Tiqueta</span>
+          </div>
+
+          <div class="itq-el draggable el-qr" id="elQR" data-el-key="qr">
+            <div class="qr-box-container qr-box" id="qrBox">
+              <div class="qr-canvas" id="qrcodeCanvas"></div>
+              <img class="qr-center-icon" id="qrCenterIcon" alt="">
+            </div>
+          </div>
+
+          <div class="itq-el draggable brand-el" id="elBrand" data-el-key="brand">
+            <img class="company-custom-logo" id="companyCustomLogo" alt="">
+            <div class="brand-text-group" id="companyTextGroup">
+              <span class="label-subcompany" id="labelSubCompany">Centro Automotivo</span>
+              <div class="brand-row">
+                <div class="brand-badge" id="brandBadge">a</div>
+                <img class="brand-inline-logo" id="brandInlineLogo" alt="">
+                <span class="label-company-name" id="labelCompanyName">autobox</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="itq-el draggable el-subtitle" id="elSubtitle" data-el-key="subtitle">
+            <span class="label-subtitle" id="labelSubtitle">Verifique sua troca de óleo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="viewA4" class="hidden w-full flex flex-col items-center py-2 lg:py-6">
+      <div class="no-print text-center mb-3 space-y-1">
+        <h3 class="text-sm font-semibold text-slate-300">Folha A4 Otimizada</h3>
+        <p class="text-xs text-slate-500">Zoom <span id="a4ZoomInfo">100%</span> • <span id="a4LayoutInfo">2×2</span></p>
+      </div>
+      <div id="a4Viewport" class="w-full flex justify-center overflow-hidden">
+        <div id="a4Scaler"><div id="a4Page" class="a4-page"></div></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="pngModal" onclick="closePngModal(event)">
+  <div class="flex flex-col items-center gap-4">
+    <img id="pngPreviewImg" alt="Pré-visualização PNG">
+    <div class="flex gap-2">
+      <button onclick="downloadSinglePNG()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-5 rounded-lg text-sm flex items-center gap-2 transition-all"><i class="fa-solid fa-download"></i> Baixar PNG</button>
+      <button onclick="closePngModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2.5 px-5 rounded-lg text-sm transition-all">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toastMsg"></span></div>
+
+<script>
+const STORAGE_KEY = 'itiqueta_state_v5';
+const ICONS_KEY = 'itiqueta_icons_v5';
+const TEMPLATES_KEY = 'itiqueta_templates_v5';
+
+const DEFAULT_STATE = {
+  title: "I-Tiqueta",
+  subtitle: "Verifique sua troca de óleo",
+  subCompany: "Centro Automotivo",
+  companyName: "autobox",
+  bgColor: "#f97316",
+  textColor: "#000000",
+  titleEColor: "#2563eb",
+  shape: "rounded",
+  backgroundType: "color",
+  qrData: "https://autobox.com.br/troca-de-oleo",
+  qrIconSrc: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23f97316' d='M32 64C32 28.7 60.7 0 96 0L256 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64L32 64zM208 96c0-8.8-7.2-16-16-16l-64 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l64 0c8.8 0 16-7.2 16-16z'/></svg>",
+  companyLogoSrc: null,
+  isMirrored: false,
+  dragEnabled: true,
+  guidesEnabled: true,
+  iconBgEnabled: false,
+  /* Dimensões em mm */
+  labelWidthMm: 65,
+  labelHeightMm: 65,
+  labelRotation: 0,     /* 0 ou 90 */
+  forcedCols: 0,        /* 0 = auto */
+  forcedRows: 0,        /* 0 = auto */
+  labelGapMm: 3,
+  pageMarginMm: 6,
+  distribution: 'stretch',
+  el: {
+    title:       { x: 50, y: 13, size: 24, weight: 800, visible: true },
+    qr:          { x: 50, y: 50, size: 110, visible: true },
+    brand:       { x: 50, y: 81, visible: true, showLogo: true, showText: true, badgeMode: 'letter' },
+    subCompany:  { size: 10, weight: 600, visible: true },
+    brandBadge:  { size: 20, visible: true },
+    companyName: { size: 18, weight: 800, visible: true },
+    companyLogo: { size: 40 },
+    subtitle:    { x: 50, y: 93, size: 12, weight: 600, visible: true },
+    qrIcon:      { size: 32, visible: true }
+  },
+  labelBorder: { width: 0, color: '#000000', style: 'solid', radius: 28 },
+  qrBorder:    { width: 2, color: '#e2e8f0', style: 'solid', radius: 16, padding: 10, bg: '#ffffff' }
+};
+
+let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+let savedIcons = [];
+let savedTemplates = [];
+
+const MM_TO_PX = 96 / 25.4;
+const BASE_LABEL_PX = 300;
+
+let saveTimer;
+function scheduleSave(){ clearTimeout(saveTimer); saveTimer = setTimeout(persistState, 400); }
+function persistState(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); flashSaveStatus('Salvo'); }
+  catch(e) { flashSaveStatus('Falha', true); }
+}
+function flashSaveStatus(text, isError){
+  ['saveStatus','saveStatusMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = isError ? '#f87171' : '#4ade80';
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.textContent = ''; }, 1200);
+  });
+}
+function loadPersistedState(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    Object.keys(saved).forEach(k => {
+      if (k === 'el' && saved.el) {
+        Object.keys(saved.el).forEach(elKey => {
+          state.el[elKey] = { ...(state.el[elKey] || {}), ...saved.el[elKey] };
+        });
+      } else if (k === 'labelBorder' && saved.labelBorder) {
+        state.labelBorder = { ...state.labelBorder, ...saved.labelBorder };
+      } else if (k === 'qrBorder' && saved.qrBorder) {
+        state.qrBorder = { ...state.qrBorder, ...saved.qrBorder };
+      } else {
+        state[k] = saved[k];
+      }
+    });
+  } catch(e) { console.warn(e); }
+}
+
+function loadSavedIcons(){
+  try { savedIcons = JSON.parse(localStorage.getItem(ICONS_KEY) || '[]'); } catch(e){ savedIcons = []; }
+}
+function persistIcons(){ try { localStorage.setItem(ICONS_KEY, JSON.stringify(savedIcons)); } catch(e){ toast('Limite de armazenamento', 'error'); } }
+function renderIconsGallery(){
+  const el = document.getElementById('iconsGallery');
+  if (!el) return;
+  if (savedIcons.length === 0) { el.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1">Nenhum ícone salvo.</div>'; return; }
+  el.innerHTML = savedIcons.map(icon => `
+    <div class="icon-card" data-id="${icon.id}" title="${icon.name || 'Ícone'}">
+      <img src="${icon.src}" alt="">
+      <button class="icon-del" onclick="event.stopPropagation();deleteIcon('${icon.id}')">×</button>
+    </div>`).join('');
+  el.querySelectorAll('.icon-card').forEach(card => {
+    card.addEventListener('click', () => applyIconFromGallery(card.dataset.id));
+  });
+}
+function saveCurrentQrIcon(){
+  if (!state.qrIconSrc) { toast('Nenhum ícone carregado', 'error'); return; }
+  if (savedIcons.some(i => i.src === state.qrIconSrc)) { toast('Já está na galeria'); return; }
+  savedIcons.unshift({ id: 'i_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), name: 'Ícone', src: state.qrIconSrc, createdAt: Date.now() });
+  persistIcons(); renderIconsGallery(); toast('Ícone salvo', 'success');
+}
+function saveCompanyLogoToGallery(){
+  if (!state.companyLogoSrc) { toast('Nenhuma logo enviada', 'error'); return; }
+  if (savedIcons.some(i => i.src === state.companyLogoSrc)) { toast('Já está na galeria'); return; }
+  savedIcons.unshift({ id: 'i_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), name: 'Logo', src: state.companyLogoSrc, createdAt: Date.now() });
+  persistIcons(); renderIconsGallery(); toast('Logo salva', 'success');
+}
+function applyIconFromGallery(id){
+  const icon = savedIcons.find(i => i.id === id);
+  if (!icon) return;
+  state.qrIconSrc = icon.src; applyAll(); toast('Ícone aplicado', 'success');
+}
+function deleteIcon(id){ savedIcons = savedIcons.filter(i => i.id !== id); persistIcons(); renderIconsGallery(); toast('Removido'); }
+
+function loadSavedTemplates(){
+  try { savedTemplates = JSON.parse(localStorage.getItem(TEMPLATES_KEY) || '[]'); } catch(e){ savedTemplates = []; }
+}
+function persistTemplates(){ try { localStorage.setItem(TEMPLATES_KEY, JSON.stringify(savedTemplates)); } catch(e){ toast('Limite de armazenamento', 'error'); } }
+function renderTemplatesGallery(){
+  const el = document.getElementById('templatesGallery');
+  if (!el) return;
+  if (savedTemplates.length === 0) { el.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1">Nenhum modelo salvo.</div>'; return; }
+  el.innerHTML = savedTemplates.map(tpl => {
+    const s = tpl.state;
+    const isTransparent = s.backgroundType === 'transparent';
+    const radius = s.shape === 'circle' ? '50%' : s.shape === 'square' ? '2px' : '12px';
+    const bg = isTransparent ? '' : s.bgColor;
+    const titleE = (s.title||'').match(/^i-/i) ? (s.title||'').substring(0,2) : '';
+    const titleT = titleE ? (s.title||'').substring(2) : (s.title||'');
+    return `<div class="tpl-card" data-id="${tpl.id}">
+      <div class="tpl-thumb ${isTransparent?'tpl-thumb-transparent':''}" style="${isTransparent?'':'background:'+bg+';'}">
+        <div class="tpl-thumb-inner" style="border-radius:${radius};">
+          <div class="tpl-thumb-title"><span style="color:${s.titleEColor||'#2563eb'}">${titleE}</span><span style="color:${s.textColor||'#000'}">${titleT}</span></div>
+          <div class="tpl-thumb-qr"></div>
+          <div class="tpl-thumb-brand" style="color:${s.textColor||'#000'}">${s.companyName||''}</div>
+        </div>
+      </div>
+      <div class="tpl-name">${escapeHtml(tpl.name)}</div>
+      <button class="tpl-del" onclick="event.stopPropagation();deleteTemplate('${tpl.id}')">×</button>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('.tpl-card').forEach(card => card.addEventListener('click', () => loadTemplate(card.dataset.id)));
+}
+function escapeHtml(str){ return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function saveAsTemplate(){
+  const name = prompt('Nome do modelo:', 'Modelo ' + (savedTemplates.length + 1));
+  if (!name || !name.trim()) return;
+  savedTemplates.unshift({ id: 't_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), name: name.trim(), state: JSON.parse(JSON.stringify(state)), createdAt: Date.now() });
+  persistTemplates(); renderTemplatesGallery(); toast('Modelo salvo', 'success');
+}
+function loadTemplate(id){
+  const tpl = savedTemplates.find(t => t.id === id);
+  if (!tpl || !confirm('Carregar modelo "'+tpl.name+'"?')) return;
+  state = JSON.parse(JSON.stringify(tpl.state));
+  Object.keys(DEFAULT_STATE).forEach(k => { if (state[k] === undefined) state[k] = JSON.parse(JSON.stringify(DEFAULT_STATE[k])); });
+  Object.keys(DEFAULT_STATE.el).forEach(k => { if (!state.el[k]) state.el[k] = JSON.parse(JSON.stringify(DEFAULT_STATE.el[k])); });
+  syncAllUI(); applyAll(); toast('Modelo carregado', 'success');
+}
+function deleteTemplate(id){
+  const tpl = savedTemplates.find(t => t.id === id);
+  if (!tpl || !confirm('Excluir "'+tpl.name+'"?')) return;
+  savedTemplates = savedTemplates.filter(t => t.id !== id);
+  persistTemplates(); renderTemplatesGallery(); toast('Removido');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadPersistedState();
+  loadSavedIcons();
+  loadSavedTemplates();
+  bindBasicControls();
+  bindFineTuning();
+  initGuidePool();
+  generateQRCode();
+  syncAllUI();
+  applyAll();
+  makeAllDraggable();
+  renderIconsGallery();
+  renderTemplatesGallery();
+});
+
+function syncAllUI(){
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+  set('inputTitle', state.title);
+  set('inputSubtitle', state.subtitle);
+  set('inputSubCompany', state.subCompany);
+  set('inputCompanyName', state.companyName);
+  set('selectShape', state.shape);
+  set('selectBackgroundType', state.backgroundType);
+  set('colorBg', state.bgColor);
+  set('colorText', state.textColor);
+  set('colorE', state.titleEColor);
+  set('inputQrData', state.qrData);
+  set('inputLabelWidth', state.labelWidthMm);
+  set('inputLabelHeight', state.labelHeightMm);
+  set('inputForcedCols', state.forcedCols);
+  set('inputForcedRows', state.forcedRows);
+  set('inputLabelGap', state.labelGapMm);
+  set('inputPageMargin', state.pageMarginMm);
+  set('selectDistribution', state.distribution);
+  set('selectBadgeMode', state.el.brand.badgeMode || 'letter');
+  const tdr = document.getElementById('toggleDrag'); if (tdr) tdr.checked = state.dragEnabled;
+  const tgu = document.getElementById('toggleGuides'); if (tgu) tgu.checked = state.guidesEnabled;
+  const tbi = document.getElementById('toggleIconBg'); if (tbi) tbi.checked = state.iconBgEnabled === true;
+  const tro = document.getElementById('toggleRotation'); if (tro) tro.checked = state.labelRotation === 90;
+  const label = document.getElementById('liveLabel');
+  if (label) label.classList.toggle('mirrored', state.isMirrored);
+  if (state.isMirrored) {
+    const btnN = document.getElementById('btnNormalMode'), btnM = document.getElementById('btnMirrorMode');
+    const badge = document.getElementById('mirrorBadge');
+    if (btnN) btnN.className = "p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all";
+    if (btnM) btnM.className = "p-2.5 rounded-lg border text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20";
+    if (badge) badge.classList.remove('hidden');
+  }
+  syncFineTuningUI();
+}
+
+window.addEventListener('resize', () => { clearTimeout(window._rt); window._rt = setTimeout(() => { updatePreviewLabelSize(); fitA4Sheet(); }, 120); });
+
+function bindBasicControls(){
+  const bind = (id, evt, fn) => { const el = document.getElementById(id); if (el) el.addEventListener(evt, fn); };
+  bind('inputTitle','input',e=>{state.title=e.target.value;applyAll()});
+  bind('inputSubtitle','input',e=>{state.subtitle=e.target.value;applyAll()});
+  bind('inputSubCompany','input',e=>{state.subCompany=e.target.value;applyAll()});
+  bind('inputCompanyName','input',e=>{state.companyName=e.target.value;applyAll()});
+  bind('selectShape','change',e=>{state.shape=e.target.value;applyAll()});
+  bind('selectBackgroundType','change',e=>{state.backgroundType=e.target.value;regenerateQR();applyAll()});
+  bind('colorBg','input',e=>{state.bgColor=e.target.value;applyAll()});
+  bind('colorText','input',e=>{state.textColor=e.target.value;applyAll()});
+  bind('colorE','input',e=>{state.titleEColor=e.target.value;applyAll()});
+  bind('inputQrData','input',e=>{state.qrData=e.target.value||"https://autobox.com.br";regenerateQR()});
+
+  bind('inputLabelWidth','input',e=>{state.labelWidthMm=Math.min(200,Math.max(15,parseFloat(e.target.value)||65));updatePreviewLabelSize();renderA4Sheet();scheduleSave()});
+  bind('inputLabelHeight','input',e=>{state.labelHeightMm=Math.min(200,Math.max(15,parseFloat(e.target.value)||65));updatePreviewLabelSize();renderA4Sheet();scheduleSave()});
+  bind('inputForcedCols','input',e=>{state.forcedCols=Math.min(20,Math.max(0,parseInt(e.target.value)||0));renderA4Sheet();scheduleSave()});
+  bind('inputForcedRows','input',e=>{state.forcedRows=Math.min(30,Math.max(0,parseInt(e.target.value)||0));renderA4Sheet();scheduleSave()});
+  bind('inputLabelGap','input',e=>{state.labelGapMm=Math.min(20,Math.max(0,parseInt(e.target.value)||0));renderA4Sheet();scheduleSave()});
+  bind('inputPageMargin','input',e=>{state.pageMarginMm=Math.min(20,Math.max(0,parseInt(e.target.value)||0));renderA4Sheet();scheduleSave()});
+
+  bind('toggleRotation','change',e=>{state.labelRotation = e.target.checked ? 90 : 0; updatePreviewLabelSize(); renderA4Sheet(); scheduleSave();});
+
+  bind('selectDistribution','change',e=>{state.distribution=e.target.value;renderA4Sheet();scheduleSave()});
+  bind('selectBadgeMode','change',e=>{state.el.brand.badgeMode=e.target.value;applyElements();renderA4Sheet();scheduleSave()});
+  bind('uploadQrIcon','change',handleQrIconUpload);
+  bind('uploadCompanyLogo','change',handleCompanyLogoUpload);
+  bind('toggleDrag','change',e=>{state.dragEnabled=e.target.checked;applyDragState()});
+  bind('toggleGuides','change',e=>{state.guidesEnabled=e.target.checked;if(!e.target.checked)clearGuides()});
+  bind('toggleIconBg','change',e=>{
+    state.iconBgEnabled = e.target.checked;
+    applyElements(); renderA4Sheet(); scheduleSave();
+    const modal = document.getElementById('pngModal');
+    if (modal && modal.classList.contains('active')) previewPNG();
+    toast(e.target.checked ? 'Fundo branco ativado' : 'Ícone transparente', 'success');
+  });
+  bind('qrBorderColor','input',e=>{state.qrBorder.color=e.target.value;applyAll()});
+  bind('qrBgColor','input',e=>{state.qrBorder.bg=e.target.value;applyAll()});
+  bind('labelBorderColor','input',e=>{state.labelBorder.color=e.target.value;applyAll()});
+}
+
+function bindFineTuning(){
+  document.querySelectorAll('[data-el][data-prop]').forEach(input => {
+    const elKey = input.dataset.el;
+    const prop = input.dataset.prop;
+    const isRange = input.type === 'range';
+    const isCheck = input.type === 'checkbox';
+    input.addEventListener('input', () => {
+      let val;
+      if (isCheck) val = input.checked;
+      else if (isRange) val = parseFloat(input.value);
+      else val = input.value;
+      if (state[elKey] && typeof state[elKey] === 'object' && !state.el[elKey]) state[elKey][prop] = val;
+      else if (state.el[elKey]) state.el[elKey][prop] = val;
+      const row = input.closest('.ft-row');
+      if (row) {
+        const valSpan = row.querySelector('.ft-val');
+        if (valSpan) { const suffix = input.dataset.suffix || ''; valSpan.textContent = val + suffix; }
+      }
+      applyAll();
+    });
+  });
+}
+function syncFineTuningUI(){
+  document.querySelectorAll('[data-el][data-prop]').forEach(input => {
+    const elKey = input.dataset.el;
+    const prop = input.dataset.prop;
+    let val;
+    if (state[elKey] && typeof state[elKey] === 'object' && !state.el[elKey]) val = state[elKey][prop];
+    else if (state.el[elKey]) val = state.el[elKey][prop];
+    if (val === undefined) return;
+    if (input.type === 'checkbox') input.checked = !!val;
+    else input.value = val;
+    const row = input.closest('.ft-row');
+    if (row) {
+      const valSpan = row.querySelector('.ft-val');
+      if (valSpan) { const suffix = input.dataset.suffix || ''; valSpan.textContent = val + suffix; }
+    }
+  });
+  const qbc = document.getElementById('qrBorderColor'); if (qbc) qbc.value = state.qrBorder.color;
+  const qbg = document.getElementById('qrBgColor'); if (qbg) qbg.value = state.qrBorder.bg;
+  const lbc = document.getElementById('labelBorderColor'); if (lbc) lbc.value = state.labelBorder.color;
+}
+
+function applyAll(){
+  applyLabelBase();
+  applyElements();
+  applyQrStyles();
+  updatePreviewLabelSize();
+  renderA4Sheet();
+  scheduleSave();
+}
+
+function applyLabelBase(){
+  const label = document.getElementById('liveLabel');
+  if (!label) return;
+  if (state.backgroundType === 'transparent') {
+    label.style.backgroundColor = 'transparent';
+    label.style.boxShadow = 'inset 0 0 0 1px rgba(148,163,184,.4)';
+  } else {
+    label.style.backgroundColor = state.bgColor;
+    label.style.boxShadow = '0 8px 25px -5px rgba(0,0,0,.5)';
+  }
+  let radius = state.labelBorder.radius;
+  if (state.shape === 'circle') radius = 9999;
+  else if (state.shape === 'square') radius = 0;
+  label.style.borderRadius = 'calc(' + radius + 'px * var(--u))';
+  label.style.border = state.labelBorder.width > 0
+    ? 'calc(' + state.labelBorder.width + 'px * var(--u)) ' + state.labelBorder.style + ' ' + state.labelBorder.color
+    : 'none';
+}
+
+function applyElements(){
+  const u = 'var(--u)';
+  const $ = id => document.getElementById(id);
+
+  const elTitle = $('elTitle');
+  if (elTitle) {
+    const t = state.el.title;
+    elTitle.style.left = t.x + '%';
+    elTitle.style.top = t.y + '%';
+    elTitle.style.fontSize = 'calc(' + t.size + 'px * ' + u + ')';
+    elTitle.style.fontWeight = t.weight;
+    elTitle.classList.toggle('hidden-el', !t.visible);
+    const titleE = $('labelTitleE'), titleT = $('labelTitleText');
+    if (titleE) titleE.style.color = state.titleEColor;
+    if (titleT) titleT.style.color = state.textColor;
+    const titleStr = state.title || '';
+    if (/^i-/i.test(titleStr)) {
+      titleE.textContent = titleStr.substring(0,2);
+      titleT.textContent = titleStr.substring(2);
+    } else {
+      titleE.textContent = '';
+      titleT.textContent = titleStr;
+    }
+  }
+
+  const elQR = $('elQR');
+  if (elQR) {
+    const q = state.el.qr;
+    elQR.style.left = q.x + '%';
+    elQR.style.top = q.y + '%';
+    elQR.classList.toggle('hidden-el', !q.visible);
+    const qrBox = $('qrBox');
+    if (qrBox) {
+      qrBox.style.width = 'calc(' + q.size + 'px * ' + u + ')';
+      qrBox.style.height = 'calc(' + q.size + 'px * ' + u + ')';
+      qrBox.style.padding = 'calc(' + state.qrBorder.padding + 'px * ' + u + ')';
+      qrBox.style.borderRadius = 'calc(' + state.qrBorder.radius + 'px * ' + u + ')';
+      qrBox.style.borderWidth = state.qrBorder.width > 0 ? 'calc(' + state.qrBorder.width + 'px * ' + u + ')' : '0';
+      qrBox.style.borderStyle = state.qrBorder.style;
+      qrBox.style.borderColor = state.qrBorder.color;
+      qrBox.style.backgroundColor = state.backgroundType === 'transparent' ? 'transparent' : state.qrBorder.bg;
+    }
+  }
+
+  const qrIcon = $('qrCenterIcon');
+  if (qrIcon) {
+    if (state.qrIconSrc && state.el.qrIcon.visible) {
+      qrIcon.src = state.qrIconSrc;
+      qrIcon.classList.remove('hidden');
+    } else {
+      qrIcon.classList.add('hidden');
+    }
+    if (state.iconBgEnabled === true) qrIcon.classList.add('has-white-bg');
+    else qrIcon.classList.remove('has-white-bg');
+    qrIcon.style.width = 'calc(' + state.el.qrIcon.size + 'px * ' + u + ')';
+    qrIcon.style.height = 'calc(' + state.el.qrIcon.size + 'px * ' + u + ')';
+  }
+
+  const elBrand = $('elBrand');
+  if (elBrand) {
+    const b = state.el.brand;
+    elBrand.style.left = b.x + '%';
+    elBrand.style.top = b.y + '%';
+    elBrand.classList.toggle('hidden-el', !b.visible);
+
+    const textGroup = $('companyTextGroup');
+    const logo = $('companyCustomLogo');
+    const badge = $('brandBadge');
+    const inlineLogo = $('brandInlineLogo');
+
+    if (b.showLogo && state.companyLogoSrc) {
+      logo.src = state.companyLogoSrc;
+      logo.classList.add('active');
+      logo.style.height = 'calc(' + state.el.companyLogo.size + 'px * ' + u + ')';
+      logo.style.maxWidth = 'calc(' + (state.el.companyLogo.size * 5) + 'px * ' + u + ')';
+    } else {
+      logo.classList.remove('active');
+      logo.removeAttribute('src');
+    }
+    if (b.showText) textGroup.classList.remove('hidden');
+    else textGroup.classList.add('hidden');
+
+    const subC = $('labelSubCompany');
+    if (subC) {
+      subC.textContent = state.subCompany;
+      subC.style.color = state.textColor;
+      subC.style.fontSize = 'calc(' + state.el.subCompany.size + 'px * ' + u + ')';
+      subC.style.fontWeight = state.el.subCompany.weight;
+      subC.classList.toggle('hidden', !state.el.subCompany.visible);
+    }
+
+    const mode = b.badgeMode || 'letter';
+    const badgeSizePx = state.el.brandBadge.size;
+    badge.style.display = 'none';
+    inlineLogo.style.display = 'none';
+
+    if (state.el.brandBadge.visible && mode === 'letter') {
+      badge.style.display = 'flex';
+      badge.style.width = 'calc(' + badgeSizePx + 'px * ' + u + ')';
+      badge.style.height = 'calc(' + badgeSizePx + 'px * ' + u + ')';
+      badge.style.fontSize = 'calc(' + (badgeSizePx * 0.6) + 'px * ' + u + ')';
+    } else if (state.el.brandBadge.visible && mode === 'logo' && state.companyLogoSrc) {
+      inlineLogo.src = state.companyLogoSrc;
+      inlineLogo.style.display = 'block';
+      inlineLogo.style.height = 'calc(' + badgeSizePx + 'px * ' + u + ')';
+      inlineLogo.style.maxWidth = 'calc(' + (badgeSizePx * 4) + 'px * ' + u + ')';
+    } else if (state.el.brandBadge.visible && mode === 'logo' && !state.companyLogoSrc) {
+      badge.style.display = 'flex';
+      badge.style.width = 'calc(' + badgeSizePx + 'px * ' + u + ')';
+      badge.style.height = 'calc(' + badgeSizePx + 'px * ' + u + ')';
+      badge.style.fontSize = 'calc(' + (badgeSizePx * 0.6) + 'px * ' + u + ')';
+    }
+
+    const companyName = $('labelCompanyName');
+    if (companyName) {
+      companyName.textContent = state.companyName;
+      companyName.style.color = state.textColor;
+      companyName.style.fontSize = 'calc(' + state.el.companyName.size + 'px * ' + u + ')';
+      companyName.style.fontWeight = state.el.companyName.weight;
+      companyName.classList.toggle('hidden', !state.el.companyName.visible);
+    }
+  }
+
+  const elSub = $('elSubtitle');
+  if (elSub) {
+    const s = state.el.subtitle;
+    elSub.style.left = s.x + '%';
+    elSub.style.top = s.y + '%';
+    elSub.classList.toggle('hidden-el', !s.visible);
+    const sub = $('labelSubtitle');
+    if (sub) {
+      sub.textContent = state.subtitle;
+      sub.style.color = state.textColor;
+      sub.style.fontSize = 'calc(' + s.size + 'px * ' + u + ')';
+      sub.style.fontWeight = s.weight;
+    }
+  }
+}
+
+function applyQrStyles(){
+  const qrBox = document.getElementById('qrBox');
+  if (!qrBox) return;
+  qrBox.style.borderRadius = 'calc(' + state.qrBorder.radius + 'px * var(--u))';
+  qrBox.style.borderColor = state.qrBorder.color;
+  qrBox.style.backgroundColor = state.backgroundType === 'transparent' ? 'transparent' : state.qrBorder.bg;
+}
+
+/* Atualiza tamanho e escala do label de preview conforme mm e rotação */
+function updatePreviewLabelSize(){
+  const label = document.getElementById('liveLabel');
+  const wrap = document.getElementById('singleLabelWrapper');
+  if (!label || !wrap) return;
+
+  let lw = state.labelWidthMm;
+  let lh = state.labelHeightMm;
+  if (state.labelRotation === 90) [lw, lh] = [lh, lw];
+
+  const ar = lw / lh;
+
+  const maxW = Math.min(380, Math.max(180, wrap.clientWidth - 60));
+  const maxH = 440;
+
+  let w = maxW;
+  let h = w / ar;
+  if (h > maxH) { h = maxH; w = h * ar; }
+
+  label.style.width = w + 'px';
+  label.style.height = h + 'px';
+  label.style.aspectRatio = '';
+
+  const minDim = Math.min(w, h);
+  label.style.setProperty('--u', (minDim / BASE_LABEL_PX).toFixed(4));
+
+  /* Info */
+  const info = document.getElementById('lblPreviewSize');
+  if (info) info.textContent = lw + '×' + lh + ' mm' + (state.labelRotation === 90 ? ' (rotacionado)' : '');
+}
+
+/* ============ GUIAS ============ */
+const guidePool = { v: [], h: [], dots: [] };
+function initGuidePool(){
+  const layer = document.getElementById('guideLayer');
+  if (!layer) return;
+  layer.innerHTML = '';
+  guidePool.v = []; guidePool.h = []; guidePool.dots = [];
+  for (let i = 0; i < 10; i++) { const g = document.createElement('div'); g.className = 'guide guide-v'; layer.appendChild(g); guidePool.v.push(g); }
+  for (let i = 0; i < 10; i++) { const g = document.createElement('div'); g.className = 'guide guide-h'; layer.appendChild(g); guidePool.h.push(g); }
+  for (let i = 0; i < 24; i++) { const d = document.createElement('div'); d.className = 'guide-dot'; layer.appendChild(d); guidePool.dots.push(d); }
+}
+function renderGuides(vLines, hLines, dots){
+  guidePool.v.forEach((g, i) => { if (i < vLines.length) { g.style.left = vLines[i] + '%'; g.style.display = 'block'; } else g.style.display = 'none'; });
+  guidePool.h.forEach((g, i) => { if (i < hLines.length) { g.style.top = hLines[i] + '%'; g.style.display = 'block'; } else g.style.display = 'none'; });
+  guidePool.dots.forEach((d, i) => { if (i < dots.length) { d.style.left = dots[i].x + '%'; d.style.top = dots[i].y + '%'; d.style.display = 'block'; } else d.style.display = 'none'; });
+}
+function clearGuides(){
+  guidePool.v.forEach(g => g.style.display = 'none');
+  guidePool.h.forEach(g => g.style.display = 'none');
+  guidePool.dots.forEach(d => d.style.display = 'none');
+}
+
+function makeAllDraggable(){
+  document.querySelectorAll('#liveLabel .itq-el[data-el-key]').forEach(el => el.addEventListener('pointerdown', onDragStart));
+  applyDragState();
+}
+function applyDragState(){
+  document.querySelectorAll('#liveLabel .itq-el[data-el-key]').forEach(el => {
+    el.classList.toggle('draggable', state.dragEnabled);
+    el.classList.toggle('locked', !state.dragEnabled);
+  });
+}
+function getSnapTargets(excludeKey){
+  const xs = [50], ys = [50];
+  Object.entries(state.el).forEach(([key, el]) => {
+    if (key === excludeKey) return;
+    if (el.x !== undefined && el.visible !== false) xs.push(el.x);
+    if (el.y !== undefined && el.visible !== false) ys.push(el.y);
+  });
+  const dedupe = (arr) => { const out = []; arr.forEach(v => { if (!out.some(o => Math.abs(o - v) < 0.5)) out.push(v); }); return out.sort((a,b)=>a-b); };
+  return { x: dedupe(xs), y: dedupe(ys) };
+}
+function onDragStart(e){
+  if (!state.dragEnabled) return;
+  if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+  const el = e.currentTarget;
+  const key = el.dataset.elKey;
+  const label = document.getElementById('liveLabel');
+  const rect = label.getBoundingClientRect();
+  e.preventDefault();
+  el.classList.add('dragging');
+  try { el.setPointerCapture(e.pointerId); } catch(_){}
+  const startX = e.clientX, startY = e.clientY;
+  const startPos = { x: state.el[key].x, y: state.el[key].y };
+  const mirror = state.isMirrored ? -1 : 1;
+  const threshold = 2.2;
+  const targets = state.guidesEnabled ? getSnapTargets(key) : null;
+
+  const onMove = ev => {
+    const dx = ((ev.clientX - startX) / rect.width) * 100 * mirror;
+    const dy = ((ev.clientY - startY) / rect.height) * 100;
+    let newX = Math.max(-10, Math.min(110, startPos.x + dx));
+    let newY = Math.max(-10, Math.min(110, startPos.y + dy));
+    if (state.guidesEnabled && targets) {
+      const mX = targets.x.filter(t => Math.abs(newX - t) <= threshold);
+      const mY = targets.y.filter(t => Math.abs(newY - t) <= threshold);
+      if (mX.length > 0) { let b = mX[0]; mX.forEach(t => { if (Math.abs(t - newX) < Math.abs(b - newX)) b = t; }); newX = b; }
+      if (mY.length > 0) { let b = mY[0]; mY.forEach(t => { if (Math.abs(t - newY) < Math.abs(b - newY)) b = t; }); newY = b; }
+      const dots = [];
+      mX.forEach(x => mY.forEach(y => dots.push({x,y})));
+      if (dots.length === 0 && (mX.length > 0 || mY.length > 0)) dots.push({x:newX,y:newY});
+      renderGuides(mX, mY, dots);
+    } else clearGuides();
+    state.el[key].x = newX;
+    state.el[key].y = newY;
+    el.style.left = newX + '%';
+    el.style.top = newY + '%';
+  };
+  const onUp = () => {
+    el.classList.remove('dragging'); clearGuides();
+    el.removeEventListener('pointermove', onMove);
+    el.removeEventListener('pointerup', onUp);
+    el.removeEventListener('pointercancel', onUp);
+    try { el.releasePointerCapture(e.pointerId); } catch(_){}
+    syncFineTuningUI();
+    renderA4Sheet();
+    scheduleSave();
+  };
+  el.addEventListener('pointermove', onMove);
+  el.addEventListener('pointerup', onUp);
+  el.addEventListener('pointercancel', onUp);
+}
+
+function regenerateQR(){ generateQRCode(); }
+function generateQRCode(){
+  const container = document.getElementById('qrcodeCanvas');
+  if (!container) return;
+  container.innerHTML = '';
+  const transparent = state.backgroundType === 'transparent';
+  const lightColor = transparent ? 'rgba(255,255,255,0)' : '#ffffff';
+  const tmp = document.createElement('div');
+  new QRCode(tmp, { text: state.qrData, width: 480, height: 480, colorDark: "#000000", colorLight: lightColor, correctLevel: QRCode.CorrectLevel.H });
+  requestAnimationFrame(() => {
+    const canvas = tmp.querySelector('canvas');
+    if (canvas) {
+      const out = document.createElement('img');
+      out.src = canvas.toDataURL('image/png');
+      out.alt = 'QR';
+      out.style.width = '100%';
+      out.style.height = '100%';
+      out.style.display = 'block';
+      container.appendChild(out);
+    }
+    applyElements();
+    renderA4Sheet();
+  });
+}
+
+function setMirrorMode(mirror){
+  state.isMirrored = mirror;
+  const btnN = document.getElementById('btnNormalMode'), btnM = document.getElementById('btnMirrorMode');
+  const badge = document.getElementById('mirrorBadge');
+  if (mirror) {
+    btnM.className = "p-2.5 rounded-lg border text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20";
+    btnN.className = "p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all";
+    badge.classList.remove('hidden');
+  } else {
+    btnN.className = "p-2.5 rounded-lg border text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-500/20";
+    btnM.className = "p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs font-medium flex items-center justify-center gap-2 transition-all";
+    badge.classList.add('hidden');
+  }
+  const label = document.getElementById('liveLabel');
+  label.classList.toggle('mirrored', mirror);
+  renderA4Sheet();
+  scheduleSave();
+}
+
+function stripWhiteFromIcon(){
+  if (!state.qrIconSrc) { toast('Nenhum ícone carregado', 'error'); return; }
+  if (state.qrIconSrc.startsWith('data:image/svg')) { toast('SVG já é transparente'); return; }
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      const threshold = 240;
+      let removed = 0;
+      const total = data.length / 4;
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i+3] > 0 && data[i] >= threshold && data[i+1] >= threshold && data[i+2] >= threshold) {
+          data[i+3] = 0;
+          removed++;
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+      state.qrIconSrc = canvas.toDataURL('image/png');
+      applyElements(); renderA4Sheet(); scheduleSave();
+      const modal = document.getElementById('pngModal');
+      if (modal && modal.classList.contains('active')) previewPNG();
+      const pct = ((removed / total) * 100).toFixed(1);
+      toast('Fundo removido (' + pct + '%)', 'success');
+    } catch(err) { toast('Erro ao processar', 'error'); }
+  };
+  img.onerror = () => toast('Falha ao carregar', 'error');
+  img.src = state.qrIconSrc;
+}
+
+function handleQrIconUpload(e){
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    state.qrIconSrc = ev.target.result;
+    applyElements(); renderA4Sheet(); scheduleSave();
+    toast('Ícone carregado');
+  };
+  reader.readAsDataURL(file);
+}
+function removeQrIcon(){ state.qrIconSrc = null; applyElements(); renderA4Sheet(); scheduleSave(); }
+function handleCompanyLogoUpload(e){
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { state.companyLogoSrc = ev.target.result; applyElements(); renderA4Sheet(); scheduleSave(); };
+  reader.readAsDataURL(file);
+}
+function removeCompanyLogo(){ state.companyLogoSrc = null; applyElements(); renderA4Sheet(); scheduleSave(); }
+
+/* =========================================================
+   CÁLCULO DE LAYOUT A4 (mm, orientação, cols/rows manuais)
+========================================================= */
+function calculateA4Layout(){
+  const PAGE_W = 210, PAGE_H = 297;
+  const padMm = state.pageMarginMm;
+  const usableW = PAGE_W - 2 * padMm;
+  const usableH = PAGE_H - 2 * padMm;
+  const minGap = state.labelGapMm;
+
+  let lw = state.labelWidthMm;
+  let lh = state.labelHeightMm;
+  if (state.labelRotation === 90) [lw, lh] = [lh, lw];
+
+  let cols, rows;
+  const fc = state.forcedCols || 0;
+  const fr = state.forcedRows || 0;
+
+  if (fc > 0 && fr > 0) {
+    cols = fc; rows = fr;
+    const maxLw = (usableW - (cols - 1) * minGap) / cols;
+    const maxLh = (usableH - (rows - 1) * minGap) / rows;
+    const scale = Math.min(maxLw / lw, maxLh / lh, 1);
+    lw *= scale; lh *= scale;
+  } else if (fc > 0) {
+    cols = fc;
+    const maxLw = (usableW - (cols - 1) * minGap) / cols;
+    const scale = Math.min(maxLw / lw, 1);
+    lw *= scale; lh *= scale;
+    rows = Math.max(1, Math.floor((usableH + minGap) / (lh + minGap)));
+  } else if (fr > 0) {
+    rows = fr;
+    const maxLh = (usableH - (rows - 1) * minGap) / rows;
+    const scale = Math.min(maxLh / lh, 1);
+    lw *= scale; lh *= scale;
+    cols = Math.max(1, Math.floor((usableW + minGap) / (lw + minGap)));
+  } else {
+    cols = Math.max(1, Math.floor((usableW + minGap) / (lw + minGap)));
+    rows = Math.max(1, Math.floor((usableH + minGap) / (lh + minGap)));
+  }
+
+  cols = Math.max(1, cols);
+  rows = Math.max(1, rows);
+
+  let gapX, gapY;
+  if (state.distribution === 'stretch') {
+    gapX = cols > 1 ? (usableW - cols * lw) / (cols - 1) : 0;
+    gapY = rows > 1 ? (usableH - rows * lh) / (rows - 1) : 0;
+  } else {
+    gapX = minGap; gapY = minGap;
+  }
+  gapX = Math.max(minGap, gapX);
+  gapY = Math.max(minGap, gapY);
+
+  return { labelW: lw, labelH: lh, cols, rows, gapX, gapY, padMm, usableW, usableH, pageW: PAGE_W, pageH: PAGE_H };
+}
+
+function renderA4Sheet(){
+  const container = document.getElementById('a4Page');
+  const source = document.getElementById('liveLabel');
+  if (!container || !source) return;
+
+  const lay = calculateA4Layout();
+
+  container.innerHTML = '';
+  container.style.padding = lay.padMm + 'mm';
+
+  if (state.distribution === 'stretch') {
+    container.style.justifyContent = lay.cols > 1 ? 'space-between' : 'center';
+    container.style.alignContent = lay.rows > 1 ? 'space-between' : 'center';
+  } else {
+    container.style.justifyContent = 'center';
+    container.style.alignContent = 'center';
+  }
+
+  const total = lay.cols * lay.rows;
+  const minDimMm = Math.min(lay.labelW, lay.labelH);
+  const u = (minDimMm * MM_TO_PX) / BASE_LABEL_PX;
+
+  for (let i = 0; i < total; i++) {
+    const col = i % lay.cols;
+    const row = Math.floor(i / lay.cols);
+    const item = document.createElement('div');
+    item.className = 'a4-item';
+    item.style.width = lay.labelW + 'mm';
+    item.style.height = lay.labelH + 'mm';
+
+    if (state.distribution === 'center') {
+      item.style.marginRight = (col === lay.cols - 1) ? 0 : lay.gapX + 'mm';
+      item.style.marginBottom = (row === lay.rows - 1) ? 0 : lay.gapY + 'mm';
+    }
+
+    const clone = source.cloneNode(true);
+    /* Remove IDs (para não duplicar), mas classes permanecem → CSS funciona */
+    clone.removeAttribute('id');
+    clone.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
+    clone.querySelectorAll('.guide-layer, .guide, .guide-dot').forEach(n => n.remove());
+    clone.style.width = '100%';
+    clone.style.height = '100%';
+    clone.style.aspectRatio = '';
+    clone.style.boxShadow = 'none';
+    clone.style.margin = '0';
+    clone.style.setProperty('--u', u.toFixed(4));
+
+    clone.querySelectorAll('.draggable, .dragging, .locked').forEach(n => {
+      n.classList.remove('draggable', 'dragging', 'locked');
+    });
+
+    item.appendChild(clone);
+    container.appendChild(item);
+  }
+
+  const filledPct = ((lay.cols * lay.labelW * lay.rows * lay.labelH) / (lay.pageW * lay.pageH) * 100).toFixed(1);
+  document.getElementById('lblCalculatedCount').innerText = total + ' un. (' + lay.cols + '×' + lay.rows + ')';
+  document.getElementById('lblEffectiveSize').innerText = lay.labelW.toFixed(1) + '×' + lay.labelH.toFixed(1) + ' mm';
+  document.getElementById('lblFillPercent').innerText = filledPct + '%';
+  const info = document.getElementById('a4LayoutInfo');
+  if (info) info.textContent = lay.cols + '×' + lay.rows;
+
+  fitA4Sheet();
+}
+
+function fitA4Sheet(){
+  const viewport = document.getElementById('a4Viewport');
+  const scaler = document.getElementById('a4Scaler');
+  const page = document.getElementById('a4Page');
+  if (!viewport || !scaler || !page) return;
+  if (viewport.offsetParent === null) return;
+  const pageW = page.offsetWidth || (210 * MM_TO_PX);
+  const pageH = page.offsetHeight || (297 * MM_TO_PX);
+  const availW = viewport.clientWidth;
+  const scale = Math.min(1, availW / pageW);
+  scaler.style.width = pageW + 'px';
+  scaler.style.height = (pageH * scale) + 'px';
+  scaler.style.transformOrigin = 'top center';
+  scaler.style.transform = 'scale(' + scale + ')';
+  viewport.style.height = (pageH * scale) + 'px';
+  const info = document.getElementById('a4ZoomInfo');
+  if (info) info.textContent = Math.round(scale * 100) + '%';
+}
+
+function switchTab(tab){
+  const viewSingle = document.getElementById('viewSingle');
+  const viewA4 = document.getElementById('viewA4');
+  const btnPreview = document.getElementById('tabBtnPreview');
+  const btnA4 = document.getElementById('tabBtnA4');
+  const activeCls = "flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs font-semibold bg-orange-500 text-white transition-all whitespace-nowrap";
+  const idleCls = "flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white transition-all whitespace-nowrap";
+  if (tab === 'single') {
+    viewSingle.classList.remove('hidden');
+    viewA4.classList.add('hidden');
+    btnPreview.className = activeCls;
+    btnA4.className = idleCls;
+    updatePreviewLabelSize();
+  } else {
+    viewSingle.classList.add('hidden');
+    viewA4.classList.remove('hidden');
+    btnA4.className = activeCls;
+    btnPreview.className = idleCls;
+    requestAnimationFrame(fitA4Sheet);
+  }
+}
+
+function resetFineTuning(){
+  state.el = JSON.parse(JSON.stringify(DEFAULT_STATE.el));
+  state.labelBorder = JSON.parse(JSON.stringify(DEFAULT_STATE.labelBorder));
+  state.qrBorder = JSON.parse(JSON.stringify(DEFAULT_STATE.qrBorder));
+  syncFineTuningUI(); applyAll(); toast('Ajustes resetados');
+}
+function resetAllState(){
+  if (!confirm('Resetar TUDO?')) return;
+  state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  syncAllUI(); generateQRCode(); applyAll(); toast('Estado resetado', 'success');
+}
+
+let toastTimer;
+function toast(msg, type){
+  const el = document.getElementById('toast'), m = document.getElementById('toastMsg');
+  if (!el || !m) return;
+  m.textContent = msg;
+  el.className = 'show';
+  if (type === 'success') el.classList.add('success');
+  if (type === 'error') el.classList.add('error');
+  const icon = el.querySelector('i');
+  if (icon) icon.className = type === 'error' ? 'fa-solid fa-circle-exclamation' : type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-info';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 2400);
+}
+
+/* =========================================================
+   PNG EXPORT
+========================================================= */
+function buildPNGCanvas(){
+  const size = 1000;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  const S = size / BASE_LABEL_PX;
+  const transparent = state.backgroundType === 'transparent';
+  const iconBg = state.iconBgEnabled === true;
+
+  ctx.save();
+  if (state.isMirrored) { ctx.translate(size, 0); ctx.scale(-1, 1); }
+
+  if (!transparent) {
+    ctx.fillStyle = state.bgColor;
+    let r = state.labelBorder.radius;
+    if (state.shape === 'circle') r = size / 2;
+    else if (state.shape === 'square') r = 0;
+    r = r * S;
+    ctx.beginPath();
+    if (r >= size / 2) ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+    else ctx.roundRect(0, 0, size, size, r);
+    ctx.fill();
+  }
+
+  if (state.labelBorder.width > 0) {
+    let r = state.labelBorder.radius;
+    if (state.shape === 'circle') r = size / 2;
+    else if (state.shape === 'square') r = 0;
+    r = r * S;
+    const lw = state.labelBorder.width * S;
+    ctx.strokeStyle = state.labelBorder.color;
+    ctx.lineWidth = lw;
+    ctx.setLineDash(state.labelBorder.style === 'dashed' ? [lw*3, lw*2] : state.labelBorder.style === 'dotted' ? [lw, lw*1.5] : []);
+    ctx.beginPath();
+    if (r >= size/2) ctx.arc(size/2, size/2, size/2 - lw/2, 0, Math.PI*2);
+    else ctx.roundRect(lw/2, lw/2, size - lw, size - lw, Math.max(0, r - lw/2));
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  const imgPromises = [];
+
+  if (state.el.title.visible) {
+    const t = state.el.title;
+    const cx = (t.x/100) * size, cy = (t.y/100) * size;
+    ctx.font = t.weight + ' ' + (t.size * S) + 'px Inter, Arial, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const titleStr = state.title || '';
+    let parts;
+    if (/^i-/i.test(titleStr)) {
+      parts = [{ txt: titleStr.substring(0,2), color: state.titleEColor }, { txt: titleStr.substring(2), color: state.textColor }];
+    } else parts = [{ txt: titleStr, color: state.textColor }];
+    const totalW = parts.reduce((s,p) => s + ctx.measureText(p.txt).width, 0);
+    let x = cx - totalW/2;
+    parts.forEach(p => { ctx.fillStyle = p.color; ctx.textAlign = 'left'; ctx.fillText(p.txt, x, cy); x += ctx.measureText(p.txt).width; });
+  }
+
+  const qrImgEl = document.querySelector('#qrcodeCanvas img, #qrcodeCanvas canvas');
+  if (state.el.qr.visible && qrImgEl) {
+    const q = state.el.qr;
+    const cx = (q.x/100) * size, cy = (q.y/100) * size;
+    const qSize = q.size * S;
+    const bx = cx - qSize/2, by = cy - qSize/2;
+    const bw = state.qrBorder.width * S;
+    const bRad = state.qrBorder.radius * S;
+    if (!transparent) {
+      ctx.fillStyle = state.qrBorder.bg;
+      ctx.beginPath(); ctx.roundRect(bx, by, qSize, qSize, bRad); ctx.fill();
+    }
+    if (bw > 0) {
+      ctx.strokeStyle = state.qrBorder.color; ctx.lineWidth = bw;
+      ctx.beginPath(); ctx.roundRect(bx, by, qSize, qSize, bRad); ctx.stroke();
+    }
+    const pad = state.qrBorder.padding * S;
+    const inner = qSize - pad*2;
+    imgPromises.push(new Promise(resolve => {
+      const im = new Image();
+      im.crossOrigin = 'anonymous';
+      im.onload = () => { ctx.drawImage(im, bx+pad, by+pad, inner, inner); resolve(); };
+      im.onerror = () => resolve();
+      im.src = qrImgEl.src || qrImgEl.toDataURL?.() || '';
+    }));
+    if (state.qrIconSrc && state.el.qrIcon.visible) {
+      imgPromises.push(new Promise(resolve => {
+        const ic = new Image();
+        ic.crossOrigin = 'anonymous';
+        ic.onload = () => {
+          const iSize = state.el.qrIcon.size * S;
+          const ix = cx - iSize/2, iy = cy - iSize/2;
+          if (iconBg) {
+            const bgPad = 4 * S;
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath(); ctx.roundRect(ix-bgPad, iy-bgPad, iSize+bgPad*2, iSize+bgPad*2, 6*S); ctx.fill();
+          }
+          ctx.drawImage(ic, ix, iy, iSize, iSize);
+          resolve();
+        };
+        ic.onerror = () => resolve();
+        ic.src = state.qrIconSrc;
+      }));
+    }
+  }
+
+  if (state.el.brand.visible) {
+    const b = state.el.brand;
+    const cx = (b.x/100) * size, cy = (b.y/100) * size;
+    const showLogoBig = b.showLogo && state.companyLogoSrc;
+    const showText = b.showText;
+    const logoSize = state.el.companyLogo.size * S;
+    const mode = b.badgeMode || 'letter';
+    const badgeSize = state.el.brandBadge.visible ? state.el.brandBadge.size * S : 0;
+
+    const drawTextBlock = (centerY) => {
+      const nameSize = state.el.companyName.size * S;
+      if (state.el.subCompany.visible) {
+        ctx.font = state.el.subCompany.weight + ' ' + (state.el.subCompany.size * S) + 'px Inter, Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = state.textColor;
+        ctx.fillText((state.subCompany || '').toUpperCase(), cx, centerY - 1.4 * nameSize);
+      }
+      ctx.font = state.el.companyName.weight + ' ' + nameSize + 'px Inter, Arial, sans-serif';
+      const nameW = ctx.measureText(state.companyName || '').width;
+      let iconW = 0, gapIcon = 0, useLogoIcon = false;
+      if (badgeSize > 0) {
+        if (mode === 'letter') { iconW = badgeSize; gapIcon = 4 * S; }
+        else if (mode === 'logo' && state.companyLogoSrc) { iconW = badgeSize * 2.5; gapIcon = 6 * S; useLogoIcon = true; }
+      }
+      const totalW = iconW + gapIcon + nameW;
+      let xStart = cx - totalW/2;
+      if (badgeSize > 0 && mode === 'letter') {
+        const bx = xStart, by = centerY - badgeSize/2;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath(); ctx.arc(bx + badgeSize/2, by + badgeSize/2, badgeSize/2, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = state.bgColor;
+        ctx.font = '900 ' + (badgeSize * 0.6) + 'px Inter, Arial, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('a', bx + badgeSize/2, by + badgeSize/2 + badgeSize * 0.03);
+        xStart = bx + badgeSize + gapIcon;
+      } else if (badgeSize > 0 && useLogoIcon) {
+        imgPromises.push(new Promise(resolve => {
+          const ic = new Image(); ic.crossOrigin = 'anonymous';
+          ic.onload = () => {
+            const ratio = ic.width / ic.height;
+            let h = badgeSize, w = h * ratio;
+            if (w > badgeSize * 3) { w = badgeSize * 3; h = w / ratio; }
+            const realTotalW = w + gapIcon + nameW;
+            const realXStart = cx - realTotalW/2;
+            ctx.drawImage(ic, realXStart, centerY - h/2, w, h);
+            if (state.el.companyName.visible) {
+              ctx.fillStyle = state.textColor;
+              ctx.font = state.el.companyName.weight + ' ' + nameSize + 'px Inter, Arial, sans-serif';
+              ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+              ctx.fillText(state.companyName || '', realXStart + w + gapIcon, centerY);
+            }
+            resolve();
+          };
+          ic.onerror = () => resolve();
+          ic.src = state.companyLogoSrc;
+        }));
+        return;
+      }
+      if (state.el.companyName.visible) {
+        ctx.fillStyle = state.textColor;
+        ctx.font = state.el.companyName.weight + ' ' + nameSize + 'px Inter, Arial, sans-serif';
+        ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        ctx.fillText(state.companyName || '', xStart, centerY);
+      }
+    };
+
+    if (showLogoBig && showText) {
+      imgPromises.push(new Promise(resolve => {
+        const ic = new Image(); ic.crossOrigin = 'anonymous';
+        ic.onload = () => {
+          const ratio = ic.width / ic.height;
+          const w = logoSize * ratio, h = logoSize;
+          ctx.drawImage(ic, cx - w/2, cy - h/2 - 20*S, w, h);
+          resolve();
+        };
+        ic.onerror = () => resolve();
+        ic.src = state.companyLogoSrc;
+      }));
+      drawTextBlock(cy + logoSize/2 + 10*S);
+    } else if (showLogoBig) {
+      imgPromises.push(new Promise(resolve => {
+        const ic = new Image(); ic.crossOrigin = 'anonymous';
+        ic.onload = () => {
+          const ratio = ic.width / ic.height;
+          const w = logoSize * ratio, h = logoSize;
+          ctx.drawImage(ic, cx - w/2, cy - h/2, w, h);
+          resolve();
+        };
+        ic.onerror = () => resolve();
+        ic.src = state.companyLogoSrc;
+      }));
+    } else if (showText) drawTextBlock(cy);
+  }
+
+  if (state.el.subtitle.visible) {
+    const s = state.el.subtitle;
+    const cx = (s.x/100) * size, cy = (s.y/100) * size;
+    ctx.font = s.weight + ' ' + (s.size * S) + 'px Inter, Arial, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = state.textColor;
+    ctx.fillText(state.subtitle || '', cx, cy);
+  }
+
+  return Promise.all(imgPromises).then(() => { ctx.restore(); return canvas; });
+}
+
+function previewPNG(){
+  const modal = document.getElementById('pngModal');
+  const img = document.getElementById('pngPreviewImg');
+  buildPNGCanvas().then(canvas => { img.src = canvas.toDataURL('image/png'); modal.classList.add('active'); });
+}
+function closePngModal(e){
+  if (e && e.target !== document.getElementById('pngModal') && e.type === 'click') return;
+  document.getElementById('pngModal').classList.remove('active');
+}
+function downloadSinglePNG(){
+  buildPNGCanvas().then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'i-tiqueta-' + (state.isMirrored ? 'espelhada' : 'normal') + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePngModal(); });
+</script>
+</body>
+</html>
